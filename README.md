@@ -35,15 +35,7 @@ CSS3: Estilos y diseño responsivo.
 
 🛠️ Cómo Ejecutar la Web
 
-Clonar el repositorio:
-
-git clone https://github.com/tu-usuario/gamingesp.git
-
-Navegar al directorio del proyecto:
-
-cd gamingesp
-
-Abrir el archivo index.html en tu navegador preferido para explorar el sitio.
+https://gamingespyt.github.io/gamingesp/
 
 📀 Próximas Mejoras
 
