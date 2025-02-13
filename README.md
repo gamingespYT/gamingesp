@@ -24,7 +24,10 @@ CSS3: Estilos y diseño responsivo.
 
 /gamingesp
 │-- /css
+│   └── index.css  # Estilos de la web
 │   └── mapas.css  # Estilos de la web
+│   └── redes.css  # Estilos de la web
+│   └── staff.css  # Estilos de la web
 │-- /img
 │   └── (Imágenes de los mapas y logotipos)
 │-- index.html     # Página principal
