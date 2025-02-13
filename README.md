@@ -1,4 +1,4 @@
-== **Gaming España**
+**Gaming España**
 
 Bienvenido al repositorio de Gaming España, tu punto de encuentro para mapas únicos en el modo creativo de Fortnite, guías prácticas y entretenimiento gamer. Descubre desafíos épicos y experiencias diseñadas para sorprender. ¡Únete a nuestra comunidad y lleva tu pasión por los videojuegos al siguiente nivel!
 
