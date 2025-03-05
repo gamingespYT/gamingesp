@@ -11,9 +11,24 @@ html, body {
     font-family: Arial, sans-serif;
     height: 100%;
     overflow-x: hidden; /* Oculta el scroll horizontal */
-    overflow-y: hidden; /* Oculta el scroll vertical */
     background: url('../img/Fondo.png') no-repeat center center fixed; /* Cambia fondo.jpg por tu imagen */
     background-size: cover;
+}
+
+/* Ocultar scroll vertical en pantallas grandes */
+@media (min-width: 769px) {
+    html, body {
+        overflow-y: hidden; /* Oculta el scroll vertical en pantallas grandes */
+        font-size: 18px; /* Aumenta el tamaño del texto en pantallas grandes */
+    }
+}
+
+/* Permitir scroll vertical en dispositivos móviles */
+@media (max-width: 768px) {
+    html, body {
+        overflow-y: auto; /* Permite el scroll vertical en dispositivos móviles */
+        font-size: 16px; /* Tamaño del texto en dispositivos móviles */
+    }
 }
 
 /* Menú superior */
@@ -144,7 +159,6 @@ main {
     min-height: calc(100vh - 60px); /* Ajustar altura teniendo en cuenta el menú */
     padding: 20px;
     text-align: center;
-    overflow: hidden; /* Oculta el scroll dentro del main */
 }
 
 main img {
