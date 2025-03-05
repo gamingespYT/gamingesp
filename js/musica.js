@@ -26,6 +26,11 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+    // Detener la creación de nuevos emojis cuando la canción termine
+    audio.addEventListener("ended", function () {
+        stopFallingEmojis();
+    });
+
     // Crear tooltip con mejor diseño
     const tooltip = document.createElement("div");
     tooltip.textContent = "🔊✨ ¡Púlsame para escuchar la canción! 🎤🎧";
