@@ -11,6 +11,7 @@ html, body {
     font-family: Arial, sans-serif;
     height: 100%;
     overflow-x: hidden; /* Oculta el scroll horizontal */
+    overflow-y: hidden; /* Oculta el scroll vertical */
     background: url('../img/Fondo.png') no-repeat center center fixed; /* Cambia fondo.jpg por tu imagen */
     background-size: cover;
 }
@@ -143,6 +144,7 @@ main {
     min-height: calc(100vh - 60px); /* Ajustar altura teniendo en cuenta el menú */
     padding: 20px;
     text-align: center;
+    overflow: hidden; /* Oculta el scroll dentro del main */
 }
 
 main img {

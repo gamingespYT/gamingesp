@@ -5,9 +5,14 @@ document.addEventListener("DOMContentLoaded", function () {
     // Creamos un elemento de audio
     const audio = new Audio("./Sonidos/BTsong.mp3"); // Reemplaza con la URL de la canción
     
-    // Variable para el contenedor de los emojis
-    let emojiContainer;
-    let emojiInterval;
+    // Crear un contenedor para los emojis que caerán
+    const emojiContainer = document.createElement("div");
+    emojiContainer.style.position = "fixed"; // Usamos fixed para que esté en una capa flotante
+    emojiContainer.style.top = "0";
+    emojiContainer.style.left = "0";
+    emojiContainer.style.pointerEvents = "none"; // Asegura que no interfieran con la interacción del usuario
+    emojiContainer.style.zIndex = "999"; // Aseguramos que esté encima de otros elementos pero sin interferir
+    document.body.appendChild(emojiContainer);
 
     // Agregamos un evento de clic al logo
     logo.addEventListener("click", function () {
@@ -17,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
         } else {
             audio.pause();
             audio.currentTime = 0;
-            stopFallingEmojis(); // Detener emojis al pausar la canción
+            stopFallingEmojis(); // Detener la creación de nuevos emojis al pausar la canción
         }
     });
 
@@ -60,22 +65,15 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Función para crear emojis que caen
-    function startFallingEmojis() {
-        // Crear el contenedor de los emojis solo cuando se hace clic en el logo
-        emojiContainer = document.createElement("div");
-        emojiContainer.style.position = "fixed"; // Usamos fixed para que esté en una capa flotante
-        emojiContainer.style.top = "0";
-        emojiContainer.style.left = "0";
-        emojiContainer.style.pointerEvents = "none"; // Asegura que no interfieran con la interacción del usuario
-        emojiContainer.style.zIndex = "999"; // Aseguramos que esté encima de otros elementos pero sin interferir
-        emojiContainer.style.height = "0"; // Evitamos que afecte la altura de la página
-        document.body.appendChild(emojiContainer);
+    let emojiInterval;
 
+    function startFallingEmojis() {
+        const emojis = ["🎉", "🎧"]; // Lista de emojis
         emojiInterval = setInterval(function () {
             const emoji = document.createElement("div");
-            emoji.textContent = "🎉"; // Emoji que caerá, puedes agregar más si deseas
+            emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)]; // Seleccionar un emoji aleatorio
             emoji.style.position = "absolute";
-            emoji.style.left = `${Math.random() * window.innerWidth}px`;
+            emoji.style.left = `${Math.random() * (window.innerWidth - 30)}px`; // Ajustar para que caigan dentro de los márgenes
             emoji.style.top = "-30px"; // Comienza desde arriba
             emoji.style.fontSize = "30px"; // Tamaño del emoji
             emoji.style.animation = "fall 4s forwards"; // Cambié "infinite" por "forwards" para que solo caigan una vez
@@ -86,19 +84,13 @@ document.addEventListener("DOMContentLoaded", function () {
             emoji.addEventListener('animationend', function () {
                 emoji.remove();
             });
-        }, 300); // Intervalo para crear un emoji
+        }, 100); // Intervalo reducido para crear más emojis
     }
 
-    // Función para detener la caída de emojis
+    // Función para detener la creación de nuevos emojis
     function stopFallingEmojis() {
         clearInterval(emojiInterval);
-        const emojis = emojiContainer.querySelectorAll('div');
-        emojis.forEach(emoji => {
-            // Solo eliminar los emojis (no eliminar otros elementos como el tooltip o el logo)
-            if (emoji.textContent === "🎉") {
-                emoji.remove();
-            }
-        });
+        // No eliminamos los emojis existentes, permitimos que terminen su animación
     }
 
     // CSS adicional para la animación de los emojis (para hacer que caigan)
