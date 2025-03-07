@@ -1,23 +1,56 @@
 body, html {
     height: 100%;
     margin: 0;
-    font-family: Arial, sans-serif;
-    overflow: hidden; /* Evita scroll vertical */
+    font-family: 'Arial', sans-serif;
+    overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #f4f4f4;
+    background: linear-gradient(to bottom right, #aa151d, #f1bf00);
+    background-attachment: fixed;
 }
 
 #game-selector-container {
     margin-bottom: 20px;
+    text-align: center;
+}
+
+#game-selector-container label {
+    display: block;
+    margin-bottom: 10px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 select {
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
+    padding: 12px 25px;
+    font-size: 18px;
+    border-radius: 25px;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    color: #666;
+    font-family: 'Bebas Neue', sans-serif;
+    cursor: pointer;
+}
+
+select:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+select option {
+    font-family: 'Arial', sans-serif;
+    color: #333;
+}
+
+select option:first-child {
+    font-style: italic;
+    color: #888;
 }
 
 #game-container {
@@ -25,62 +58,182 @@ select {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 10px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
     width: 90%;
     max-width: 500px;
+    transition: all 0.3s ease;
+}
+
+#game-container h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40px;
+    color: #4a90e2;
+    text-transform: uppercase;
+    margin-bottom: 20px;
 }
 
 button {
-    padding: 10px 20px;
-    font-size: 16px;
-    margin-top: 10px;
-    background-color: #4CAF50;
+    padding: 12px 25px;
+    font-size: 18px;
+    margin-top: 15px;
+    background-color: #00b5e2;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 25px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #008bb2;
+    transform: scale(1.1);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
 }
 
 .memory-board {
     display: grid;
-    grid-template-columns: repeat(5, 50px);
-    gap: 10px;
-    margin-top: 20px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin: 15px;
+    padding: 15px;
+    background-color: rgba(240, 240, 240, 0.9);
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 380px;
 }
 
 .memory-card {
-    width: 60px;
-    height: 60px;
+    aspect-ratio: 1;
+    width: 70px;
+    height: 70px;
     background-color: #fff;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 24px;
+    font-size: 2em;
     cursor: pointer;
-    border: 2px solid #ccc;
-    border-radius: 5px;
+    border: none;
+    border-radius: 12px;
     transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    user-select: none;
 }
 
 .memory-card.hidden {
-    background-color: #4CAF50;
+    background-color: #00b5e2;
     color: transparent;
+    text-shadow: none;
+    position: relative;
+    overflow: hidden;
 }
 
-.memory-board {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 10px;
-    margin: 20px;
-    padding: 20px;
-    background-color: #f0f0f0;
+.memory-card.hidden::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #00b5e2;
+    z-index: 1;
+}
+
+.memory-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.game-descriptions {
+    text-align: center;
+    padding: 10px;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.game-description {
+    margin: 10px 0;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.7);
     border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.game-description:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.game-description h3 {
+    color: #00b5e2;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    margin: 5px 0;
+}
+
+.game-description p {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.3;
+    margin: 5px 0;
+}
+
+@media (max-width: 768px) {
+    body, html {
+        height: auto;
+        padding: 15px;
+        overflow-y: auto;
+    }
+
+    body {
+        flex-direction: column;
+    }
+
+    #game-selector-container {
+        width: 100%;
+        text-align: center;
+        order: -1;
+    }
+
+    select {
+        width: 90%;
+        max-width: 300px;
+    }
+
+    #game-container {
+        margin-top: 20px;
+    }
+
+    .memory-board {
+        gap: 8px;
+        padding: 10px;
+    }
+
+    .memory-card {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5em;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+
+    .memory-board {
+        gap: 5px;
+        padding: 8px;
+        margin: 10px;
+    }
+
+    .memory-card {
+        width: 45px;
+        height: 45px;
+        font-size: 1.2em;
+    }
 }

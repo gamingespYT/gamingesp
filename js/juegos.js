@@ -10,9 +10,28 @@ gameSelector.addEventListener('change', loadGame);
 // Función para cargar el juego correspondiente
 function loadGame() {
     const selectedGame = gameSelector.value;
-    gameContainer.innerHTML = ''; // Limpiar el contenedor antes de cargar un juego
+    gameContainer.innerHTML = ''; // Limpiar el contenedor
 
-    if (selectedGame === 'guess-number') {
+    if (selectedGame === '') {
+        // Mostrar las descripciones de los juegos
+        gameContainer.innerHTML = `
+            <h2>¡Bienvenido a los Juegos!</h2>
+            <div class="game-descriptions">
+                <div class="game-description">
+                    <h3>🎯 Adivina el Número</h3>
+                    <p>Intenta adivinar el número secreto entre 1 y 100. ¡Te diremos si es mayor o menor!</p>
+                </div>
+                <div class="game-description">
+                    <h3>✌️ Piedra, Papel o Tijera</h3>
+                    <p>El clásico juego contra la computadora. ¡Elige sabiamente!</p>
+                </div>
+                <div class="game-description">
+                    <h3>🎮 Juego de Memoria</h3>
+                    <p>Encuentra todas las parejas de cartas. ¡Pon a prueba tu memoria!</p>
+                </div>
+            </div>
+        `;
+    } else if (selectedGame === 'guess-number') {
         loadGuessNumberGame();
     } else if (selectedGame === 'rock-paper-scissors') {
         loadRockPaperScissorsGame();
@@ -119,7 +138,8 @@ function loadRockPaperScissorsGame() {
 
 function loadMemoryGame() {
     const cards = [
-        '💎', '💎', '🌟', '🌟', '🍎', '🍎', '🔥', '🔥', '🍌', '🍌'
+        '🎮', '🎮', '🕹️', '🕹️', '🎲', '🎲', '🎯', '🎯', 
+        '⚔️', '⚔️', '🛡️', '🛡️', '🔫', '🔫', '🚀', '🚀'
     ];
     let shuffledCards = cards.sort(() => Math.random() - 0.5);
     let flippedCards = [];
@@ -128,9 +148,9 @@ function loadMemoryGame() {
 
     gameContainer.innerHTML = `
         <h2>Juego de Memoria</h2>
-        <p>Memoriza las cartas. Tienes 10 segundos.</p>
+        <p>¡Encuentra las parejas de cartas!</p>
         <div id="memory-board" class="memory-board">
-            ${shuffledCards.map((card, index) => `<div class="memory-card" data-card="${card}" data-index="${index}">${card}</div>`).join('')}
+            ${shuffledCards.map((card, index) => `<div class="memory-card hidden" data-card="${card}" data-index="${index}">${card}</div>`).join('')}
         </div>
         <p>Cartas emparejadas: <span id="matched-count">0</span></p>
         <p id="game-status"></p>
@@ -141,14 +161,8 @@ function loadMemoryGame() {
     const gameStatus = document.getElementById('game-status');
     const cards_elements = document.querySelectorAll('.memory-card');
 
-    // Deshabilitar la interactividad durante los 10 segundos de memorización
-    setTimeout(() => {
-        cards_elements.forEach(card => {
-            card.classList.add('hidden');
-        });
-        gameStatus.textContent = '¡Comienza el juego!';
-        memoryBoard.classList.add('interactive');
-    }, 10000);
+    // Añadir interactive inmediatamente para poder empezar a jugar
+    memoryBoard.classList.add('interactive');
 
     memoryBoard.addEventListener('click', (e) => {
         if (!memoryBoard.classList.contains('interactive') || !canFlip) return;
