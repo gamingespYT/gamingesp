@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juegos Divertidos</title>
+    <link rel="stylesheet" href="./css/juegos.css"> <!-- Asegúrate de tener este CSS vinculado -->
+</head>
+<body>
+    <div id="game-selector-container">
+        <label for="game-selector">Selecciona un juego:</label>
+        <select id="game-selector">
+            <option value="">--Selecciona un juego--</option>
+            <option value="guess-number">Adivina el Número</option>
+            <option value="rock-paper-scissors">Piedra, Papel o Tijera</option>
+            <option value="memory-game">Juego de Memoria</option>
+        </select>
+    </div>
+
+    <div id="game-container"></div>
+
+    <script src="./js/menu.js"></script>
+    <script src="./js/juegos.js"></script>
+</body>
+</html>
