@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juegos Divertidos</title>
+    <link rel="stylesheet" href="./css/juegos.css"> <!-- Asegúrate de tener este CSS vinculado -->
+</head>
+<body>
+    <div id="game-selector-container">
+        <label for="game-selector">Selecciona un juego:</label>
+        <select id="game-selector">
+            <option value="">--Selecciona un juego--</option>
+            <option value="guess-number">Adivina el Número</option>
+            <option value="rock-paper-scissors">Piedra, Papel o Tijera</option>
+            <option value="memory-game">Juego de Memoria</option>
+        </select>
+    </div>
+
+    <div id="game-container">
+        <h2>¡Bienvenido a los Juegos!</h2>
+        <div class="game-descriptions">
+            <div class="game-description">
+                <h3>🎯 Adivina el Número</h3>
+                <p>Intenta adivinar el número secreto entre 1 y 100. ¡Te diremos si es mayor o menor!</p>
+            </div>
+            <div class="game-description">
+                <h3>✌️ Piedra, Papel o Tijera</h3>
+                <p>El clásico juego contra la computadora. ¡Elige sabiamente!</p>
+            </div>
+            <div class="game-description">
+                <h3>🎮 Juego de Memoria</h3>
+                <p>Encuentra todas las parejas de cartas. ¡Pon a prueba tu memoria!</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="./js/menu.js"></script>
+    <script src="./js/juegos.js"></script>
+</body>
+</html>
