@@ -97,9 +97,9 @@ button:hover {
 .memory-board {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
+    margin-top: 0px; /* Ajuste para evitar solapamiento */
     gap: 8px;
-    margin: 15px;
-    padding: 15px;
+    padding: 7px;
     background-color: rgba(240, 240, 240, 0.9);
     border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -209,6 +209,7 @@ button:hover {
     }
 
     .memory-board {
+        margin-top: 20px; /* Ajuste para evitar solapamiento en pantallas pequeñas */
         gap: 8px;
         padding: 10px;
     }
@@ -226,6 +227,7 @@ button:hover {
     }
 
     .memory-board {
+        margin-top: 20px; /* Ajuste para evitar solapamiento en pantallas muy pequeñas */
         gap: 5px;
         padding: 8px;
         margin: 10px;
