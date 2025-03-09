@@ -29,6 +29,10 @@ function loadGame() {
                     <h3>🎮 Juego de Memoria</h3>
                     <p>Encuentra todas las parejas de cartas. ¡Pon a prueba tu memoria!</p>
                 </div>
+                <div class="game-description">
+                    <h3>🔤 Ahorcado</h3>
+                    <p>Adivina la palabra antes de que se complete el dibujo del ahorcado.</p>
+                </div>
             </div>
         `;
     } else if (selectedGame === 'guess-number') {
@@ -37,6 +41,8 @@ function loadGame() {
         loadRockPaperScissorsGame();
     } else if (selectedGame === 'memory-game') {
         loadMemoryGame();
+    } else if (selectedGame === 'hangman') {
+        loadHangmanGame();
     }
 }
 
@@ -199,4 +205,162 @@ function loadMemoryGame() {
             }
         }
     });
+}
+
+// Juego: Ahorcado
+function loadHangmanGame() {
+    const words = [
+        'fortnite',
+        'llama',
+        'pico',
+        'skin',
+        'emote',
+        'escuadron',
+        'tormenta',
+        'ala delta',
+        'pase de batalla',
+        'videojuegos',
+        'gamer',
+        'joystick',
+        'pixel',
+        'multijugador',
+        'noob',
+        'lag',
+        'competitividad'
+    ];
+    const word = words[Math.floor(Math.random() * words.length)];
+    let guessedLetters = [];
+    let mistakes = 0;
+    const maxMistakes = 6;
+
+    const hangmanStages = [
+        `
+      
+      
+      
+      
+      
+      
+=========`,
+        `
+      |
+      |
+      |
+      |
+      |
+      |
+=========`,
+        `
+  +---+
+      |
+      |
+      |
+      |
+      |
+=========`,
+        `
+  +---+
+  |   |
+      |
+      |
+      |
+      |
+=========`,
+        `
+  +---+
+  |   |
+  😮  |
+      |
+      |
+      |
+=========`,
+        `
+  +---+
+  |   |
+  😮  |
+ /|\\  |
+      |
+      |
+=========`,
+        `
+  +---+
+  |   |
+  😵  |
+ /|\\  |
+ / \\  |
+      |
+=========`
+    ];
+
+    // Agregar el HTML necesario
+    gameContainer.innerHTML = `
+        <h2>Ahorcado</h2>
+        <div id="hangman-drawing" class="hangman-drawing"></div>
+        <div id="word-display" class="word-display"></div>
+        <div class="controls">
+            <input type="text" id="letter-input" maxlength="1" placeholder="Ingresa una letra">
+            <button id="guess-btn">Adivinar</button>
+        </div>
+        <div id="used-letters">Letras usadas: </div>
+        <div id="hangman-status"></div>
+    `;
+
+    // Obtener referencias a los elementos del DOM
+    const hangmanDrawing = document.getElementById('hangman-drawing');
+    const wordDisplay = document.getElementById('word-display');
+    const letterInput = document.getElementById('letter-input');
+    const guessBtn = document.getElementById('guess-btn');
+    const usedLetters = document.getElementById('used-letters');
+    const hangmanStatus = document.getElementById('hangman-status');
+
+    function updateWordDisplay() {
+        wordDisplay.textContent = word.split('').map(letter => 
+            guessedLetters.includes(letter) ? letter : '_').join(' ');
+    }
+
+    function updateHangmanDrawing() {
+        hangmanDrawing.textContent = hangmanStages[mistakes];
+    }
+
+    function checkGameStatus() {
+        if (mistakes >= maxMistakes) {
+            hangmanStatus.textContent = `¡Perdiste! La palabra era "${word}".`;
+            guessBtn.disabled = true;
+            letterInput.disabled = true;
+        } else if (word.split('').every(letter => guessedLetters.includes(letter))) {
+            hangmanStatus.textContent = '¡Felicidades! Has adivinado la palabra.';
+            guessBtn.disabled = true;
+            letterInput.disabled = true;
+        }
+    }
+
+    guessBtn.addEventListener('click', () => {
+        const letter = letterInput.value.toLowerCase();
+        letterInput.value = '';
+
+        if (!letter || guessedLetters.includes(letter)) {
+            return;
+        }
+
+        guessedLetters.push(letter);
+        usedLetters.textContent = 'Letras usadas: ' + guessedLetters.join(', ');
+
+        if (word.includes(letter)) {
+            updateWordDisplay();
+        } else {
+            mistakes++;
+            updateHangmanDrawing();
+        }
+
+        checkGameStatus();
+    });
+
+    letterInput.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+            guessBtn.click();
+        }
+    });
+
+    updateHangmanDrawing();
+    updateWordDisplay();
 }
