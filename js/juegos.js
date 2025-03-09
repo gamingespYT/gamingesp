@@ -217,8 +217,6 @@ function loadHangmanGame() {
         'emote',
         'escuadron',
         'tormenta',
-        'ala delta',
-        'pase de batalla',
         'videojuegos',
         'gamer',
         'joystick',
