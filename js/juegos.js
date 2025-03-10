@@ -33,6 +33,14 @@ function loadGame() {
                     <h3>🔤 Ahorcado</h3>
                     <p>Adivina la palabra antes de que se complete el dibujo del ahorcado.</p>
                 </div>
+                <div class="game-description">
+                    <h3>🦖 Juego del Dinosaurio</h3>
+                    <p>¡Salta y esquiva obstáculos en el clásico juego del dinosaurio de Chrome!</p>
+                </div>
+                <div class="game-description">
+                    <h3>⭕ Tres en Raya</h3>
+                    <p>El clásico juego de X y O. ¡Consigue tres en línea para ganar!</p>
+                </div>
             </div>
         `;
     } else if (selectedGame === 'guess-number') {
@@ -45,6 +53,8 @@ function loadGame() {
         loadHangmanGame();
     } else if (selectedGame === 'dino-game') {
         loadDinoGame();
+    } else if (selectedGame === 'tic-tac-toe') {
+        loadTicTacToeGame();
     }
 }
 
@@ -371,5 +381,254 @@ function loadDinoGame() {
         <div class="dino-container">
             <iframe src="https://chromedino.com/" frameborder="0" scrolling="no" width="100%" height="400px" loading="lazy"></iframe>
         </div>
+        <div class="dino-link">
+            <span class="copy-text" onclick="copyDinoURL()">¿No carga? Abre una nueva pestaña en Chrome y escribe: chrome://dino</span>
+        </div>
     `;
+
+    // Función para copiar al portapapeles
+    window.copyDinoURL = function() {
+        navigator.clipboard.writeText('chrome://dino').then(() => {
+            const copyText = document.querySelector('.copy-text');
+            const originalText = copyText.textContent;
+            copyText.textContent = '¡Copiado al portapapeles!';
+            setTimeout(() => {
+                copyText.textContent = originalText;
+            }, 2000);
+        }).catch(err => {
+            console.error('Error al copiar: ', err);
+        });
+    }
+}
+
+function loadTicTacToeGame() {
+    let currentPlayer = 'X';
+    let gameBoard = ['', '', '', '', '', '', '', '', ''];
+    let gameActive = true;
+    let vsComputer = false;
+    let difficulty = 'easy';
+
+    gameContainer.innerHTML = `
+        <h2>Tres en Raya</h2>
+        <div class="game-mode-selector">
+            <button class="mode-btn active" data-mode="2p">2 Jugadores</button>
+            <button class="mode-btn" data-mode="1p">1 Jugador</button>
+        </div>
+        <div class="difficulty-selector" style="display: none;">
+            <button class="diff-btn" data-diff="easy">Fácil</button>
+            <button class="diff-btn" data-diff="hard">Difícil</button>
+            <button class="diff-btn" data-diff="impossible">Imposible</button>
+        </div>
+        <div class="game-status"></div>
+        <div class="tic-tac-toe">
+            ${Array(9).fill('').map((_, i) => `
+                <div class="cell" data-index="${i}"></div>
+            `).join('')}
+        </div>
+        <button class="reset-button">Reiniciar Juego</button>
+    `;
+
+    const gameStatus = gameContainer.querySelector('.game-status');
+    const cells = gameContainer.querySelectorAll('.cell');
+    const resetButton = gameContainer.querySelector('.reset-button');
+    const modeButtons = gameContainer.querySelectorAll('.mode-btn');
+    const difficultySelector = gameContainer.querySelector('.difficulty-selector');
+    const difficultyButtons = gameContainer.querySelectorAll('.diff-btn');
+
+    const winningConditions = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8], // Filas
+        [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columnas
+        [0, 4, 8], [2, 4, 6] // Diagonales
+    ];
+
+    function computerMove() {
+        if (!gameActive) return;
+
+        let index;
+        switch (difficulty) {
+            case 'impossible':
+                index = getBestMove();
+                break;
+            case 'hard':
+                // 95% de probabilidad de movimiento inteligente
+                index = Math.random() < 0.95 ? getBestMove() : getRandomMove();
+                break;
+            default: // easy
+                // 60% de probabilidad de movimiento inteligente
+                index = Math.random() < 0.6 ? getBestMove() : getRandomMove();
+        }
+
+        setTimeout(() => {
+            if (index !== null) {
+                const cell = cells[index];
+                gameBoard[index] = 'O';
+                cell.textContent = 'O';
+                cell.classList.add('o');
+
+                if (checkWin()) {
+                    gameStatus.textContent = '¡La computadora ha ganado!';
+                    gameActive = false;
+                    return;
+                }
+
+                if (checkDraw()) {
+                    gameStatus.textContent = '¡Empate!';
+                    gameActive = false;
+                    return;
+                }
+
+                currentPlayer = 'X';
+                gameStatus.textContent = 'Tu turno';
+            }
+        }, 500);
+    }
+
+    function getBestMove() {
+        let bestScore = -Infinity;
+        let bestMove;
+
+        for (let i = 0; i < 9; i++) {
+            if (gameBoard[i] === '') {
+                gameBoard[i] = 'O';
+                let score = minimax(gameBoard, 0, false);
+                gameBoard[i] = '';
+                if (score > bestScore) {
+                    bestScore = score;
+                    bestMove = i;
+                }
+            }
+        }
+        return bestMove;
+    }
+
+    function minimax(board, depth, isMaximizing) {
+        let winner = checkWinForMinimax();
+        if (winner !== null) {
+            return winner === 'O' ? 1 : -1;
+        }
+        if (checkDraw()) return 0;
+
+        if (isMaximizing) {
+            let bestScore = -Infinity;
+            for (let i = 0; i < 9; i++) {
+                if (board[i] === '') {
+                    board[i] = 'O';
+                    let score = minimax(board, depth + 1, false);
+                    board[i] = '';
+                    bestScore = Math.max(score, bestScore);
+                }
+            }
+            return bestScore;
+        } else {
+            let bestScore = Infinity;
+            for (let i = 0; i < 9; i++) {
+                if (board[i] === '') {
+                    board[i] = 'X';
+                    let score = minimax(board, depth + 1, true);
+                    board[i] = '';
+                    bestScore = Math.min(score, bestScore);
+                }
+            }
+            return bestScore;
+        }
+    }
+
+    function getRandomMove() {
+        const emptyCells = gameBoard.reduce((acc, cell, index) => {
+            if (cell === '') acc.push(index);
+            return acc;
+        }, []);
+        return emptyCells[Math.floor(Math.random() * emptyCells.length)];
+    }
+
+    function handleCellClick(e) {
+        const cell = e.target;
+        const index = cell.getAttribute('data-index');
+
+        if (gameBoard[index] !== '' || !gameActive) return;
+        if (vsComputer && currentPlayer === 'O') return;
+
+        gameBoard[index] = currentPlayer;
+        cell.textContent = currentPlayer;
+        cell.classList.add(currentPlayer.toLowerCase());
+
+        if (checkWin()) {
+            gameStatus.textContent = `¡${vsComputer ? 'Has ganado!' : 'Jugador ' + currentPlayer + ' ha ganado!'}`;
+            gameActive = false;
+            return;
+        }
+
+        if (checkDraw()) {
+            gameStatus.textContent = '¡Empate!';
+            gameActive = false;
+            return;
+        }
+
+        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+        gameStatus.textContent = vsComputer ? 
+            (currentPlayer === 'X' ? 'Tu turno' : 'Turno de la computadora') : 
+            `Turno del jugador ${currentPlayer}`;
+
+        if (vsComputer && currentPlayer === 'O') {
+            computerMove();
+        }
+    }
+
+    function checkWin() {
+        return winningConditions.some(condition => {
+            return condition.every(index => gameBoard[index] === currentPlayer);
+        });
+    }
+
+    function checkWinForMinimax() {
+        for (let condition of winningConditions) {
+            if (condition.every(index => gameBoard[index] === 'O')) return 'O';
+            if (condition.every(index => gameBoard[index] === 'X')) return 'X';
+        }
+        return null;
+    }
+
+    function checkDraw() {
+        return gameBoard.every(cell => cell !== '');
+    }
+
+    function resetGame() {
+        currentPlayer = 'X';
+        gameBoard = ['', '', '', '', '', '', '', '', ''];
+        gameActive = true;
+        gameStatus.textContent = vsComputer ? 'Tu turno' : `Turno del jugador ${currentPlayer}`;
+        cells.forEach(cell => {
+            cell.textContent = '';
+            cell.classList.remove('x', 'o');
+        });
+    }
+
+    // Event Listeners
+    cells.forEach(cell => {
+        cell.addEventListener('click', handleCellClick);
+    });
+
+    resetButton.addEventListener('click', resetGame);
+
+    modeButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            modeButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            vsComputer = btn.getAttribute('data-mode') === '1p';
+            difficultySelector.style.display = vsComputer ? 'block' : 'none';
+            resetGame();
+        });
+    });
+
+    difficultyButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            difficultyButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            difficulty = btn.getAttribute('data-diff');
+            resetGame();
+        });
+    });
+
+    // Inicializar el estado del juego
+    gameStatus.textContent = 'Turno del jugador X';
 }
