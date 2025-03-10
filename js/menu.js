@@ -8,8 +8,8 @@ document.addEventListener("DOMContentLoaded", function () {
             <li><a href="index.html">Inicio</a></li>
             <li><a href="mapas.html">Mapas</a></li>
             <li><a href="redes.html">Redes Sociales</a></li>
-            <li><a href="staff.html">Postulación para STAFF</a></li>
             <li><a href="juegos.html">Juegos</a></li>
+            <li><a href="staff.html">Postulación para STAFF</a></li>
         </ul>
     </header>
     `;
