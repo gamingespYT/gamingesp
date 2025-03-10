@@ -45,6 +45,10 @@ function loadGame() {
                     <h3>💣 Buscaminas</h3>
                     <p>El clásico juego de evitar las minas. ¡Usa tu lógica para descubrir las casillas seguras!</p>
                 </div>
+                <div class="game-description">
+                    <h3>🔴 Conecta 4</h3>
+                    <p>El clásico juego de alinear 4 fichas del mismo color. ¡Juega contra otro jugador o contra la computadora!</p>
+                </div>
             </div>
         `;
     } else if (selectedGame === 'guess-number') {
@@ -61,6 +65,8 @@ function loadGame() {
         loadTicTacToeGame();
     } else if (selectedGame === 'minesweeper') {
     loadMinesweeperGame();
+    }else if (selectedGame === 'connect4') {
+        loadConnect4Game();
     }
 }
 
@@ -923,4 +929,213 @@ function loadMinesweeperGame() {
     document.head.appendChild(style);
 
     initializeGame();
+}
+function loadConnect4Game() {
+    const ROWS = 6;
+    const COLS = 7;
+    let board = Array(ROWS).fill().map(() => Array(COLS).fill(''));
+    let currentPlayer = 'red';
+    let gameActive = true;
+    let vsComputer = false;
+
+    gameContainer.innerHTML = `
+        <h2>Conecta 4</h2>
+        <div class="game-mode-selector">
+            <button class="mode-btn active" data-mode="2p">2 Jugadores</button>
+            <button class="mode-btn" data-mode="1p">vs Computadora</button>
+        </div>
+        <div class="game-status"></div>
+        <div class="connect4-board">
+            ${Array(ROWS * COLS).fill('').map((_, i) => 
+                `<div class="connect4-cell" data-col="${i % COLS}"></div>`
+            ).join('')}
+        </div>
+        <button class="reset-button">Nuevo Juego</button>
+    `;
+
+    const gameStatus = gameContainer.querySelector('.game-status');
+    const cells = gameContainer.querySelectorAll('.connect4-cell');
+    const resetButton = gameContainer.querySelector('.reset-button');
+    const modeButtons = gameContainer.querySelectorAll('.mode-btn');
+
+    function dropPiece(col) {
+        if (!gameActive) return false;
+        
+        for (let row = ROWS - 1; row >= 0; row--) {
+            if (board[row][col] === '') {
+                board[row][col] = currentPlayer;
+                updateBoard();
+                
+                if (checkWin(row, col)) {
+                    gameStatus.textContent = `${vsComputer && currentPlayer === 'red' ? '¡Has ganado! 🎉' : `¡El jugador ${currentPlayer === 'red' ? '🔴 rojo' : '🟡 amarillo'} ha ganado!`}`;
+                    gameActive = false;
+                    highlightWinningCells();
+                    return true;
+                }
+
+                if (checkDraw()) {
+                    gameStatus.textContent = '¡Empate! 🤝';
+                    gameActive = false;
+                    return true;
+                }
+
+                currentPlayer = currentPlayer === 'red' ? 'yellow' : 'red';
+                gameStatus.textContent = vsComputer ? 
+                    (currentPlayer === 'red' ? 'Tu turno (🔴 rojo)' : 'Turno de la computadora (🟡 amarillo)') : 
+                    `Turno del jugador ${currentPlayer === 'red' ? '🔴 rojo' : '🟡 amarillo'}`;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function computerMove() {
+        if (!gameActive) return;
+        
+        setTimeout(() => {
+            // Estrategia simple: intentar ganar o bloquear al oponente
+            let bestCol = findBestMove();
+            dropPiece(bestCol);
+        }, 500);
+    }
+
+    function findBestMove() {
+        // Primero intentar ganar
+        for (let col = 0; col < COLS; col++) {
+            if (canDropPiece(col)) {
+                let row = getDropRow(col);
+                board[row][col] = 'yellow';
+                if (checkWin(row, col)) {
+                    board[row][col] = '';
+                    return col;
+                }
+                board[row][col] = '';
+            }
+        }
+
+        // Luego intentar bloquear al oponente
+        for (let col = 0; col < COLS; col++) {
+            if (canDropPiece(col)) {
+                let row = getDropRow(col);
+                board[row][col] = 'red';
+                if (checkWin(row, col)) {
+                    board[row][col] = '';
+                    return col;
+                }
+                board[row][col] = '';
+            }
+        }
+
+        // Si no hay movimientos críticos, elegir una columna aleatoria válida
+        let validCols = [];
+        for (let col = 0; col < COLS; col++) {
+            if (canDropPiece(col)) validCols.push(col);
+        }
+        return validCols[Math.floor(Math.random() * validCols.length)];
+    }
+
+    function canDropPiece(col) {
+        return board[0][col] === '';
+    }
+
+    function getDropRow(col) {
+        for (let row = ROWS - 1; row >= 0; row--) {
+            if (board[row][col] === '') return row;
+        }
+        return -1;
+    }
+
+    function checkWin(row, col) {
+        const directions = [
+            [0, 1],  // horizontal
+            [1, 0],  // vertical
+            [1, 1],  // diagonal derecha
+            [1, -1]  // diagonal izquierda
+        ];
+
+        return directions.some(([dy, dx]) => {
+            return checkDirection(row, col, dy, dx) + checkDirection(row, col, -dy, -dx) >= 3;
+        });
+    }
+
+    function checkDirection(row, col, dy, dx) {
+        const color = board[row][col];
+        let count = 0;
+        let y = row + dy;
+        let x = col + dx;
+
+        while (y >= 0 && y < ROWS && x >= 0 && x < COLS && board[y][x] === color) {
+            count++;
+            y += dy;
+            x += dx;
+        }
+
+        return count;
+    }
+
+    function checkDraw() {
+        return board[0].every(cell => cell !== '');
+    }
+
+    function updateBoard() {
+        cells.forEach((cell, i) => {
+            const row = Math.floor(i / COLS);
+            const col = i % COLS;
+            cell.className = `connect4-cell ${board[row][col]}`;
+        });
+    }
+
+    function highlightWinningCells() {
+        // Implementar la lógica para resaltar las fichas ganadoras
+    }
+
+    function resetGame() {
+        board = Array(ROWS).fill().map(() => Array(COLS).fill(''));
+        currentPlayer = 'red';
+        gameActive = true;
+        gameStatus.textContent = vsComputer ? 
+            'Tu turno (🔴 rojo)' : 
+            'Turno del jugador 🔴 rojo';
+        updateBoard();
+    }
+
+    cells.forEach(cell => {
+        cell.addEventListener('click', () => {
+            const col = parseInt(cell.dataset.col);
+            if (vsComputer && currentPlayer === 'yellow') return;
+            
+            if (dropPiece(col) && vsComputer && gameActive) {
+                computerMove();
+            }
+        });
+
+        // Efecto hover
+        cell.addEventListener('mouseover', () => {
+            if (!gameActive || (vsComputer && currentPlayer === 'yellow')) return;
+            const col = parseInt(cell.dataset.col);
+            cells.forEach(c => {
+                if (parseInt(c.dataset.col) === col && canDropPiece(col)) {
+                    c.classList.add('highlight');
+                }
+            });
+        });
+
+        cell.addEventListener('mouseout', () => {
+            cells.forEach(c => c.classList.remove('highlight'));
+        });
+    });
+
+    resetButton.addEventListener('click', resetGame);
+
+    modeButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            modeButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            vsComputer = btn.getAttribute('data-mode') === '1p';
+            resetGame();
+        });
+    });
+
+    // Inicializar el estado del juego
+    gameStatus.textContent = 'Turno del jugador 🔴 rojo';
 }

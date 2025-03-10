@@ -414,3 +414,74 @@ button:hover {
     background-color: #00b5e2;
     color: white;
 }
+.connect4-board {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    background-color: #2196F3;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 20px auto;
+    width: fit-content;
+}
+
+.connect4-cell {
+    width: 40px;
+    height: 40px;
+    background-color: white;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    position: relative;
+}
+
+/* Modificar las clases para las fichas */
+.connect4-cell.red::before,
+.connect4-cell.yellow::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.connect4-cell.red::before {
+    background-color: #ff4757;
+}
+
+.connect4-cell.yellow::before {
+    background-color: #ffd32a;
+}
+
+/* Ajustar el efecto hover para que no oculte las fichas */
+.connect4-cell.highlight {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.connect4-cell.highlight.red::before,
+.connect4-cell.highlight.yellow::before {
+    opacity: 1;
+}
+
+.connect4-cell.win {
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.game-mode-selector {
+    margin: 15px 0;
+    text-align: center;
+}
+
+.difficulty-select {
+    margin: 10px 0;
+    display: none;
+}
