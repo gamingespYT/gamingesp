@@ -422,7 +422,7 @@ function loadTicTacToeGame() {
         </div>
         <div class="difficulty-selector" style="display: none;">
             <button class="diff-btn" data-diff="easy">Fácil</button>
-            <button class="diff-btn" data-diff="hard">Difícil</button>
+            <button class="diff-btn" data-diff="hard">Medio</button>
             <button class="diff-btn" data-diff="impossible">Imposible</button>
         </div>
         <div class="game-status"></div>
