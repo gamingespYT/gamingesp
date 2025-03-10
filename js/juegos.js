@@ -26,7 +26,7 @@ function loadGame() {
                     <p>El clásico juego contra la computadora. ¡Elige sabiamente!</p>
                 </div>
                 <div class="game-description">
-                    <h3>🎮 Juego de Memoria</h3>
+                    <h3>🤔 Memory</h3>
                     <p>Encuentra todas las parejas de cartas. ¡Pon a prueba tu memoria!</p>
                 </div>
                 <div class="game-description">
@@ -40,6 +40,10 @@ function loadGame() {
                 <div class="game-description">
                     <h3>⭕ Tres en Raya</h3>
                     <p>El clásico juego de X y O. ¡Consigue tres en línea para ganar!</p>
+                </div>
+                <div class="game-description">
+                    <h3>💣 Buscaminas</h3>
+                    <p>El clásico juego de evitar las minas. ¡Usa tu lógica para descubrir las casillas seguras!</p>
                 </div>
             </div>
         `;
@@ -55,6 +59,8 @@ function loadGame() {
         loadDinoGame();
     } else if (selectedGame === 'tic-tac-toe') {
         loadTicTacToeGame();
+    } else if (selectedGame === 'minesweeper') {
+    loadMinesweeperGame();
     }
 }
 
@@ -631,4 +637,290 @@ function loadTicTacToeGame() {
 
     // Inicializar el estado del juego
     gameStatus.textContent = 'Turno del jugador X';
+}
+function loadMinesweeperGame() {
+    const GRID_SIZE = 10;
+    const MINES_COUNT = 15;
+    let grid = [];
+    let revealed = [];
+    let flagged = [];
+    let gameOver = false;
+    let minesLeft = MINES_COUNT;
+    let safeCellsLeft = GRID_SIZE * GRID_SIZE - MINES_COUNT;
+    let isFirstClick = true;
+
+    gameContainer.innerHTML = `
+    <h2>Buscaminas</h2>
+    <div style="margin-top: 5px;">
+        <div class="game-info">
+            <span>Minas restantes: <span id="mines-left">${minesLeft}</span></span>
+        </div>
+        <div class="minesweeper-grid"></div>
+        <button id="reset-minesweeper" class="reset-button">Nuevo Juego</button>
+        <div class="instructions">
+            <p>🖱️ Click izquierdo: Revelar casilla</p>
+            <p>🚩 Click derecho: Marcar/Desmarcar bandera</p>
+        </div>
+        <div id="game-message"></div>
+    </div>
+`;
+
+    const minesweeperGrid = gameContainer.querySelector('.minesweeper-grid');
+    const minesLeftDisplay = gameContainer.querySelector('#mines-left');
+    const resetButton = gameContainer.querySelector('#reset-minesweeper');
+    const gameMessage = gameContainer.querySelector('#game-message');
+
+    function initializeGame() {
+        grid = Array(GRID_SIZE).fill().map(() => Array(GRID_SIZE).fill(0));
+        revealed = Array(GRID_SIZE).fill().map(() => Array(GRID_SIZE).fill(false));
+        flagged = Array(GRID_SIZE).fill().map(() => Array(GRID_SIZE).fill(false));
+        gameOver = false;
+        minesLeft = MINES_COUNT;
+        safeCellsLeft = GRID_SIZE * GRID_SIZE - MINES_COUNT;
+        isFirstClick = true;
+        minesLeftDisplay.textContent = minesLeft;
+        
+        // Limpiar mensaje y restaurar instrucciones
+        gameMessage.textContent = '';
+        gameMessage.className = ''; // Elimina las clases de estilo del mensaje
+        
+        // Mostrar las instrucciones nuevamente
+        const instructions = gameContainer.querySelector('.instructions');
+        if (instructions) {
+            instructions.style.display = 'block';
+        }
+        
+        renderGrid();
+    }
+
+    function placeMines(firstX, firstY) {
+        let minesPlaced = 0;
+        while (minesPlaced < MINES_COUNT) {
+            const x = Math.floor(Math.random() * GRID_SIZE);
+            const y = Math.floor(Math.random() * GRID_SIZE);
+            if (grid[y][x] !== -1 && 
+                (Math.abs(x - firstX) > 1 || Math.abs(y - firstY) > 1)) {
+                grid[y][x] = -1;
+                minesPlaced++;
+            }
+        }
+
+        // Calculate numbers
+        for (let y = 0; y < GRID_SIZE; y++) {
+            for (let x = 0; x < GRID_SIZE; x++) {
+                if (grid[y][x] !== -1) {
+                    grid[y][x] = countAdjacentMines(x, y);
+                }
+            }
+        }
+    }
+
+    function countAdjacentMines(x, y) {
+        let count = 0;
+        for (let dy = -1; dy <= 1; dy++) {
+            for (let dx = -1; dx <= 1; dx++) {
+                const newY = y + dy;
+                const newX = x + dx;
+                if (newY >= 0 && newY < GRID_SIZE && newX >= 0 && newX < GRID_SIZE) {
+                    if (grid[newY][newX] === -1) count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    function renderGrid() {
+        minesweeperGrid.innerHTML = '';
+        for (let y = 0; y < GRID_SIZE; y++) {
+            for (let x = 0; x < GRID_SIZE; x++) {
+                const cell = document.createElement('div');
+                cell.className = 'mine-cell';
+                cell.dataset.x = x;
+                cell.dataset.y = y;
+
+                if (revealed[y][x]) {
+                    cell.classList.add('revealed');
+                    if (grid[y][x] === -1) {
+                        cell.innerHTML = '💣';
+                        cell.classList.add('mine');
+                    } else if (grid[y][x] > 0) {
+                        cell.textContent = grid[y][x];
+                        cell.classList.add(`number-${grid[y][x]}`);
+                    }
+                } else if (flagged[y][x]) {
+                    cell.innerHTML = '🚩';
+                }
+
+                minesweeperGrid.appendChild(cell);
+            }
+        }
+    }
+
+    function showMessage(message, type) {
+        gameMessage.textContent = message;
+        gameMessage.className = `game-message ${type}`;
+        
+        // Ocultar las instrucciones cuando el juego termina
+        const instructions = gameContainer.querySelector('.instructions');
+        if (instructions) {
+            instructions.style.display = 'none';
+        }
+    }
+
+    function revealCell(x, y) {
+        if (revealed[y][x] || flagged[y][x] || gameOver) return;
+
+        if (isFirstClick) {
+            placeMines(x, y);
+            isFirstClick = false;
+        }
+
+        revealed[y][x] = true;
+        if (grid[y][x] === -1) {
+            gameOver = true;
+            revealAllMines();
+            showMessage('¡Game Over! Has encontrado una mina 💣', 'error');
+            return;
+        }
+
+        safeCellsLeft--;
+        if (safeCellsLeft === 0) {
+            gameOver = true;
+            showMessage('¡Felicidades! Has ganado 🎉', 'success');
+            return;
+        }
+
+        if (grid[y][x] === 0) {
+            for (let dy = -1; dy <= 1; dy++) {
+                for (let dx = -1; dx <= 1; dx++) {
+                    const newY = y + dy;
+                    const newX = x + dx;
+                    if (newY >= 0 && newY < GRID_SIZE && newX >= 0 && newX < GRID_SIZE) {
+                        if (!revealed[newY][newX]) {
+                            revealCell(newX, newY);
+                        }
+                    }
+                }
+            }
+        }
+
+        renderGrid();
+    }
+
+    function toggleFlag(x, y) {
+        if (revealed[y][x] || gameOver) return;
+
+        flagged[y][x] = !flagged[y][x];
+        minesLeft += flagged[y][x] ? -1 : 1;
+        minesLeftDisplay.textContent = minesLeft;
+        renderGrid();
+    }
+
+    function revealAllMines() {
+        for (let y = 0; y < GRID_SIZE; y++) {
+            for (let x = 0; x < GRID_SIZE; x++) {
+                if (grid[y][x] === -1) {
+                    revealed[y][x] = true;
+                }
+            }
+        }
+        renderGrid();
+    }
+
+    minesweeperGrid.addEventListener('click', (e) => {
+        if (e.target.classList.contains('mine-cell')) {
+            const x = parseInt(e.target.dataset.x);
+            const y = parseInt(e.target.dataset.y);
+            revealCell(x, y);
+        }
+    });
+
+    minesweeperGrid.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        if (e.target.classList.contains('mine-cell')) {
+            const x = parseInt(e.target.dataset.x);
+            const y = parseInt(e.target.dataset.y);
+            toggleFlag(x, y);
+        }
+    });
+
+    resetButton.addEventListener('click', initializeGame);
+
+    const style = document.createElement('style');
+    style.textContent = `
+        .minesweeper-grid {
+            display: grid;
+            grid-template-columns: repeat(${GRID_SIZE}, 30px);
+            gap: 1px;
+            background-color: #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 20px auto;
+        }
+        .mine-cell {
+            width: 30px;
+            height: 30px;
+            background-color: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+            transition: background-color 0.2s;
+        }
+        .mine-cell:hover {
+            background-color: #ddd;
+        }
+        .mine-cell.revealed {
+            background-color: #fff;
+        }
+        .mine-cell.mine {
+            background-color: #ff9999;
+        }
+        .number-1 { color: blue; }
+        .number-2 { color: green; }
+        .number-3 { color: red; }
+        .number-4 { color: darkblue; }
+        .number-5 { color: darkred; }
+        .number-6 { color: teal; }
+        .number-7 { color: black; }
+        .number-8 { color: gray; }
+        .instructions {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #666;
+        }
+        .game-info {
+            text-align: center;
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+        .game-message {
+            text-align: center;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-weight: bold;
+            animation: fadeIn 0.3s ease-in;
+        }
+        .game-message.error {
+            background-color: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+        .game-message.success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    `;
+    document.head.appendChild(style);
+
+    initializeGame();
 }
