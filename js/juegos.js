@@ -43,6 +43,8 @@ function loadGame() {
         loadMemoryGame();
     } else if (selectedGame === 'hangman') {
         loadHangmanGame();
+    } else if (selectedGame === 'dino-game') {
+        loadDinoGame();
     }
 }
 
@@ -361,4 +363,13 @@ function loadHangmanGame() {
 
     updateHangmanDrawing();
     updateWordDisplay();
+}
+
+function loadDinoGame() {
+    gameContainer.innerHTML = `
+        <h2>Juego del Dinosaurio</h2>
+        <div class="dino-container">
+            <iframe src="https://chromedino.com/" frameborder="0" scrolling="no" width="100%" height="400px" loading="lazy"></iframe>
+        </div>
+    `;
 }
