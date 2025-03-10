@@ -34,7 +34,7 @@ function loadGame() {
                     <p>Adivina la palabra antes de que se complete el dibujo del ahorcado.</p>
                 </div>
                 <div class="game-description">
-                    <h3>🦖 Juego del Dinosaurio</h3>
+                    <h3>🦖 Dino Run</h3>
                     <p>¡Salta y esquiva obstáculos en el clásico juego del dinosaurio de Chrome!</p>
                 </div>
                 <div class="game-description">
