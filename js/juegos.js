@@ -38,7 +38,7 @@ function loadGame() {
                     <p>¡Salta y esquiva obstáculos en el clásico juego del dinosaurio de Chrome!</p>
                 </div>
                 <div class="game-description">
-                    <h3>⭕ Tres en Raya</h3>
+                    <h3>⭕ Tres en Raya ❌</h3>
                     <p>El clásico juego de X y O. ¡Consigue tres en línea para ganar!</p>
                 </div>
                 <div class="game-description">
@@ -46,7 +46,7 @@ function loadGame() {
                     <p>El clásico juego de evitar las minas. ¡Usa tu lógica para descubrir las casillas seguras!</p>
                 </div>
                 <div class="game-description">
-                    <h3>🔴 Conecta 4</h3>
+                    <h3>🔴 Conecta 4 🟡</h3>
                     <p>El clásico juego de alinear 4 fichas del mismo color. ¡Juega contra otro jugador o contra la computadora!</p>
                 </div>
             </div>
