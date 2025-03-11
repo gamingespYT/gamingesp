@@ -485,3 +485,126 @@ button:hover {
     margin: 10px 0;
     display: none;
 }
+
+/* Ajustes responsivos para Conecta 4 */
+@media screen and (max-width: 480px) {
+    .connect4-board {
+        gap: 3px;
+        padding: 6px;
+    }
+
+    .connect4-cell {
+        width: 35px;
+        height: 35px;
+    }
+    
+    /* Ajustar también el tamaño de las fichas */
+    .connect4-cell.red::before,
+    .connect4-cell.yellow::before {
+        width: 35px;
+        height: 35px;
+    }
+}
+
+/* Ajustes responsivos para Buscaminas */
+@media screen and (max-width: 480px) {
+    .minesweeper-grid {
+        grid-template-columns: repeat(10, 25px);
+        gap: 1px;
+        padding: 5px;
+        margin: 10px auto;
+    }
+
+    .mine-cell {
+        width: 25px;
+        height: 25px;
+        font-size: 14px;
+    }
+
+    .game-info {
+        font-size: 0.9em;
+        margin: 5px 0;
+    }
+
+    .instructions {
+        font-size: 0.8em;
+        margin: 8px 0;
+    }
+
+    .game-message {
+        font-size: 0.9em;
+        padding: 8px;
+        margin: 8px 0;
+    }
+
+    #reset-minesweeper {
+        font-size: 14px;
+        padding: 8px 16px;
+        margin-top: 10px;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    .minesweeper-grid {
+        grid-template-columns: repeat(10, 22px);
+        gap: 1px;
+        padding: 4px;
+    }
+
+    .mine-cell {
+        width: 22px;
+        height: 22px;
+        font-size: 12px;
+    }
+
+    .game-info {
+        font-size: 0.85em;
+    }
+
+    .instructions {
+        font-size: 0.75em;
+        margin: 6px 0;
+    }
+
+    .game-message {
+        font-size: 0.8em;
+        padding: 6px;
+        margin: 6px 0;
+    }
+
+    #reset-minesweeper {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    .connect4-board {
+        gap: 2px;
+        padding: 4px;
+    }
+
+    .connect4-cell {
+        width: 28px;
+        height: 28px;
+    }
+    
+    /* Ajustar también el tamaño de las fichas */
+    .connect4-cell.red::before,
+    .connect4-cell.yellow::before {
+        width: 28px;
+        height: 28px;
+    }
+    
+    /* Ajustar el texto del estado del juego */
+    .game-status {
+        font-size: 16px;
+        margin: 10px 0;
+    }
+    
+    /* Ajustar los botones del modo de juego */
+    .mode-btn {
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+}

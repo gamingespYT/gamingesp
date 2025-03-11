@@ -462,8 +462,8 @@ function loadTicTacToeGame() {
                 index = getBestMove();
                 break;
             case 'hard':
-                // 95% de probabilidad de movimiento inteligente
-                index = Math.random() < 0.95 ? getBestMove() : getRandomMove();
+                // 85% de probabilidad de movimiento inteligente
+                index = Math.random() < 0.85 ? getBestMove() : getRandomMove();
                 break;
             default: // easy
                 // 60% de probabilidad de movimiento inteligente
@@ -942,7 +942,7 @@ function loadConnect4Game() {
         <h2>Conecta 4</h2>
         <div class="game-mode-selector">
             <button class="mode-btn active" data-mode="2p">2 Jugadores</button>
-            <button class="mode-btn" data-mode="1p">vs Computadora</button>
+            <button class="mode-btn" data-mode="1p">vs CPU</button>
         </div>
         <div class="game-status"></div>
         <div class="connect4-board">
@@ -981,7 +981,7 @@ function loadConnect4Game() {
 
                 currentPlayer = currentPlayer === 'red' ? 'yellow' : 'red';
                 gameStatus.textContent = vsComputer ? 
-                    (currentPlayer === 'red' ? 'Tu turno (🔴 rojo)' : 'Turno de la computadora (🟡 amarillo)') : 
+                    (currentPlayer === 'red' ? 'Tu turno (🔴 rojo)' : 'Turno de la CPU (🟡 amarillo)') : 
                     `Turno del jugador ${currentPlayer === 'red' ? '🔴 rojo' : '🟡 amarillo'}`;
                 return true;
             }
