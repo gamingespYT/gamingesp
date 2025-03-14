@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <ul>
             <li><a href="index.html">Inicio</a></li>
             <li><a href="mapas.html">Mapas</a></li>
-            <li><a href="redes.html">Redes Sociales</a></li>
+            <li><a href="redes.html">Redes Sociales</a></li>            
             <li><a href="juegos.html">Juegos</a></li>
             <li><a href="staff.html">Postulación para STAFF</a></li>
         </ul>
@@ -122,6 +122,99 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     `;
 
+    // Crear el HTML del banner
+    const bannerHTML = `
+    <div id="cookie-banner">
+        <div class="cookie-content">
+            <p>© 2025 Gaming España. Todos los derechos reservados. Este sitio utiliza Google Analytics para recopilar datos de navegación y mejorar la experiencia del usuario.</p>
+            <button id="accept-cookies">Aceptar</button>
+        </div>
+    </div>
+    `;
+
+    // Añadir estilos del banner
+    const bannerCSS = `
+    #cookie-banner {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: rgba(25, 25, 25, 0.95);
+        backdrop-filter: blur(10px);
+        z-index: 9999;
+        padding: 15px;
+        box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.2);
+        font-family: 'Arial', sans-serif !important;
+    }
+
+    .cookie-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+    }
+
+    #cookie-banner p {
+        color: white;
+        margin: 0;
+        font-size: 14px !important;
+        line-height: 1.5;
+        flex: 1;
+        font-family: inherit !important;
+        text-align: left !important;
+        padding: 0 !important;
+    }
+
+    #accept-cookies {
+        background-color: #d34b74;
+        color: white;
+        border: none;
+        padding: 10px 20px !important;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+        min-width: 120px;
+        height: 40px !important;
+        font-size: 16px !important;
+        font-family: inherit !important;
+        line-height: 1 !important;
+        margin: 0 !important;
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        text-transform: none !important;
+        box-shadow: none !important;
+    }
+
+    #accept-cookies:hover {
+        background-color: #b33960;
+        transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+        .cookie-content {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        #cookie-banner p {
+            font-size: 13px !important;
+            margin-bottom: 15px !important;
+            text-align: center !important;
+        }
+
+        #accept-cookies {
+            width: 100%;
+            max-width: 200px;
+            height: 45px !important;
+        }
+    }
+    `;
+
     // Insertar el HTML en el <body>
     document.body.insertAdjacentHTML("afterbegin", menuHTML);
 
@@ -136,4 +229,21 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("menu-toggle").checked = false;
         });
     });
+
+    // Modificar la lógica del banner
+    if (!sessionStorage.getItem('cookiesAccepted')) {
+        document.body.insertAdjacentHTML("beforeend", bannerHTML);
+        styleTag.innerHTML += bannerCSS;
+
+        document.getElementById('accept-cookies').addEventListener('click', () => {
+            const banner = document.getElementById('cookie-banner');
+            banner.style.opacity = '0';
+            banner.style.transform = 'translateY(100%)';
+            banner.style.transition = 'all 0.5s ease';
+            setTimeout(() => {
+                banner.remove();
+            }, 500);
+            sessionStorage.setItem('cookiesAccepted', 'true');
+        });
+    }
 });
