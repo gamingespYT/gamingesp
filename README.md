@@ -1,59 +1,83 @@
-**Gaming España**
+# 🎮 Gaming España
 
-Bienvenido al repositorio de Gaming España, tu punto de encuentro para mapas únicos en el modo creativo de Fortnite, guías prácticas y entretenimiento gamer. Descubre desafíos épicos y experiencias diseñadas para sorprender. ¡Únete a nuestra comunidad y lleva tu pasión por los videojuegos al siguiente nivel!
+Bienvenido al repositorio oficial de **Gaming España**, tu comunidad gamer con mapas creativos de Fortnite, mini juegos online gratis y contenido exclusivo.
 
-📌 Características
+🌐 **Web**: [gamingespyt.github.io/gamingesp](https://gamingespyt.github.io/gamingesp/)
 
-Mapas del Modo Creativo de Fortnite: Explora una selección de mapas únicos con sus códigos y enlaces directos para jugarlos o verlos en la web oficial de Fortnite.
+---
 
-Guías y Tutoriales: Accede a contenido práctico para mejorar tu experiencia de juego.
+## ✨ Características
 
-Noticias y Actualizaciones: Mantente informado sobre las últimas novedades en el mundo de los videojuegos.
+| Sección | Descripción |
+|---------|-------------|
+| 🗺️ **Mapas Creativos** | Códigos de mapas de Fortnite: carreras, PVP, box fights, escape rooms |
+| 🎮 **Mini Juegos** | 8 juegos gratis: Memory, Buscaminas, Conecta 4, Tres en Raya, Ahorcado, Dino Run |
+| 📱 **Redes Sociales** | YouTube, Twitch, TikTok, Instagram, Discord |
+| 👥 **Staff** | Postúlate para unirte al equipo de moderación |
 
-Redes Sociales: Conéctate con nuestra comunidad a través de diversas plataformas.
+---
 
-Postulación para STAFF: Oportunidad para unirte a nuestro equipo de moderación y contribuir al crecimiento de la comunidad.
+## 🚀 Tecnologías
 
-🚀 Tecnologías Utilizadas
+- **HTML5** - Estructura semántica
+- **CSS3** - Design system con variables, animaciones modernas y glassmorphism
+- **JavaScript** - Interactividad, juegos y componentes dinámicos
+- **SEO** - Meta tags, Open Graph, Twitter Cards, Schema.org JSON-LD
 
-HTML5: Estructura del contenido.
+---
 
-CSS3: Estilos y diseño responsivo.
+## 📂 Estructura del Proyecto
 
-📂 Estructura del Proyecto
-
+```
 /gamingesp
-│-- /css
-│   └── index.css  # Estilos de la web
-│   └── mapas.css  # Estilos de la web
-│   └── redes.css  # Estilos de la web
-│   └── staff.css  # Estilos de la web
-│-- /img
-│   └── (Imágenes de los mapas y logotipos)
-│-- index.html     # Página principal
-│-- mapas.html     # Página de mapas
-│-- redes.html     # Información sobre redes sociales
-│-- staff.html     # Formulario para postulación a STAFF
-│-- README.md      # Documentación del proyecto
+├── /css
+│   ├── design.css      # Sistema de diseño global
+│   ├── index.css       # Estilos homepage
+│   ├── mapas.css       # Estilos mapas
+│   ├── juegos.css      # Estilos mini juegos
+│   ├── redes.css       # Estilos redes sociales
+│   ├── staff.css       # Estilos staff
+│   └── 404.css         # Estilos página 404
+├── /js
+│   ├── menu.js         # Header, navegación y banner cookies
+│   ├── animations.js   # Animaciones scroll
+│   └── juegos.js       # Lógica de los mini juegos
+├── /img                # Imágenes y assets
+├── index.html          # Homepage
+├── mapas.html          # Mapas creativos
+├── juegos.html         # Mini juegos online
+├── redes.html          # Redes sociales
+├── staff.html          # Postulación staff
+├── 404.html            # Página de error
+├── robots.txt          # Configuración crawlers
+├── sitemap.xml         # Mapa del sitio para SEO
+└── README.md           # Este archivo
+```
 
-🛠️ Cómo Ejecutar la Web
+---
 
-https://gamingespyt.github.io/gamingesp/
+## 🔧 SEO Implementado
 
-📀 Próximas Mejoras
+- ✅ Meta tags optimizados (title, description, keywords)
+- ✅ Open Graph para Facebook/LinkedIn
+- ✅ Twitter Cards
+- ✅ Schema.org JSON-LD (datos estructurados)
+- ✅ Sitemap XML
+- ✅ Robots.txt
+- ✅ Google Analytics (gtag.js)
+- ✅ Banner de cookies con expiración de 3 meses
 
-Integración de más guías y tutoriales.
+---
 
-Actualizaciones periódicas con las últimas noticias del mundo gamer.
+## 📞 Contacto
 
-Ampliación de la sección de mapas con nuevas incorporaciones.
+- 📺 [YouTube](https://www.youtube.com/@Gamingesp_YT)
+- 🎬 [Twitch](https://www.twitch.tv/gamingesp_twitch)
+- 💬 [Discord](https://discord.gg/42uecDVrPp)
+- 📷 [Instagram](https://www.instagram.com/gamingesp_insta)
 
-Mejora de la interactividad y experiencia del usuario.
+---
 
-📞 Contacto
+**🎮 ¡Gracias por ser parte de Gaming España! 🔥**
 
-Si tienes preguntas, sugerencias o deseas unirte a nuestro equipo, visita nuestra sección de Redes Sociales o completa el formulario en Postulación para STAFF.
-
-🎮 ¡Gracias por ser parte de Gaming España! 🔥
-
-📢 *Este README ha sido generado con la ayuda de [ChatGPT](https://chat.openai.com/). Puede contener errores o información sujeta a cambios.
+*© 2025 Gaming España*

@@ -1,77 +1,236 @@
 <!DOCTYPE html>
 <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="icon" href="./img/logo.png" type="image/png">
-        <title>Juegos Gaming España</title>
-        <meta name='description' content='En esta seccion encontraras juegos de Gaming España para disfrutar en tu tiempo libre'>
-        <link rel="stylesheet" href="./css/juegos.css">
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6885105871910753"
-         crossorigin="anonymous"></script>
-        <link rel="canonical" href="https://gamingespyt.github.io/gamingesp/index.html"/>
-       <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-        })(window,document,'script','dataLayer','GTM-NNF84HM9');</script>
-        <!-- End Google Tag Manager -->
-    </head>
-<body>
-    <div id="game-selector-container">
-        <label for="game-selector">Selecciona un juego:</label>
-        <select id="game-selector">
-            <option value="">--Selecciona un juego--</option>
-            <option value="guess-number">🎯 Adivina el Número</option>
-            <option value="rock-paper-scissors">✌️ Piedra, Papel o Tijera</option>
-            <option value="memory-game">🤔 Memory</option>
-            <option value="hangman">🔤 Ahorcado</option>
-            <option value="dino-game">🦖 Dino Run</option>
-            <option value="tic-tac-toe">⭕ Tres en Raya ❌</option>
-            <option value="minesweeper">💣 Buscaminas</option>
-            <option value="connect4">🔴 Conecta 4 🟡</option>
-        </select>
-    </div>
 
-    <div id="game-container">
-        <h2>¡Bienvenido a los Juegos!</h2>
-        <div class="game-descriptions">
-            <div class="game-description">
-                <h3>🎯 Adivina el Número</h3>
-                <p>Intenta adivinar el número secreto entre 1 y 100. ¡Te diremos si es mayor o menor!</p>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary Meta Tags -->
+    <title>Mini Juegos Online Gratis - Memory, Buscaminas, Conecta 4 | Gaming España</title>
+    <meta name="title" content="Mini Juegos Online Gratis - Memory, Buscaminas, Conecta 4 | Gaming España">
+    <meta name="description"
+        content="Juega gratis a nuestros 8 mini juegos online: Memory, Buscaminas, Conecta 4, Tres en Raya, Ahorcado, Dino Run y más. ¡Sin descargas!">
+    <meta name="keywords"
+        content="juegos online gratis, mini juegos, memory game, buscaminas online, conecta 4, tres en raya, ahorcado, juegos HTML5">
+    <meta name="author" content="Gaming España">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://gamingespyt.github.io/gamingesp/juegos.html">
+
+    <!-- Favicon -->
+    <link rel="icon" href="./img/logo.png" type="image/png">
+    <link rel="apple-touch-icon" href="./img/logo.png">
+
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#0a0a0f">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://gamingespyt.github.io/gamingesp/juegos.html">
+    <meta property="og:title" content="Mini Juegos Online Gratis | Gaming España">
+    <meta property="og:description"
+        content="8 mini juegos gratis: Memory, Buscaminas, Conecta 4, Tres en Raya y más. ¡Juega sin descargar!">
+    <meta property="og:image" content="https://gamingespyt.github.io/gamingesp/img/logo.png">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:site_name" content="Gaming España">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://gamingespyt.github.io/gamingesp/juegos.html">
+    <meta name="twitter:title" content="Mini Juegos Online Gratis | Gaming España">
+    <meta name="twitter:description" content="8 mini juegos gratis: Memory, Buscaminas, Conecta 4 y más. ¡Juega ahora!">
+    <meta name="twitter:image" content="https://gamingespyt.github.io/gamingesp/img/logo.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="./css/design.css">
+    <link rel="stylesheet" href="./css/juegos.css">
+
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Mini Juegos Online Gratis",
+        "description": "Colección de 8 mini juegos gratis para jugar en navegador",
+        "url": "https://gamingespyt.github.io/gamingesp/juegos.html",
+        "mainEntity": {
+            "@type": "ItemList",
+            "name": "Mini Juegos",
+            "numberOfItems": 8,
+            "itemListElement": [
+                {"@type": "Game", "position": 1, "name": "Memory"},
+                {"@type": "Game", "position": 2, "name": "Buscaminas"},
+                {"@type": "Game", "position": 3, "name": "Conecta 4"},
+                {"@type": "Game", "position": 4, "name": "Tres en Raya"}
+            ]
+        }
+    }
+    </script>
+
+    <!-- Analytics -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6885105871910753"
+        crossorigin="anonymous"></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-W2KS6YMZ39"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-W2KS6YMZ39');
+    </script>
+</head>
+
+<body>
+    <main>
+        <!-- Page Header -->
+        <section class="page-header">
+            <div class="container">
+                <span class="page-badge animate-fade-in">🎮 Arcade</span>
+                <h1 class="page-title animate-fade-in-up">
+                    Mini <span class="text-gradient">Juegos</span>
+                </h1>
+                <p class="page-subtitle animate-fade-in-up delay-100">
+                    Selecciona un juego y empieza a divertirte
+                </p>
             </div>
-            <div class="game-description">
-                <h3>✌️ Piedra, Papel o Tijera</h3>
-                <p>El clásico juego contra la computadora. ¡Elige sabiamente!</p>
+        </section>
+
+        <!-- Game Selector -->
+        <section class="games-section section">
+            <div class="container">
+                <!-- Game Selector Cards -->
+                <div class="game-selector" id="game-selector">
+                    <button class="game-card reveal" data-game="guess-number" data-delay="0">
+                        <span class="game-icon">🎯</span>
+                        <span class="game-name">Adivina el Número</span>
+                    </button>
+
+                    <button class="game-card reveal" data-game="rock-paper-scissors" data-delay="50">
+                        <span class="game-icon">✌️</span>
+                        <span class="game-name">Piedra, Papel, Tijera</span>
+                    </button>
+
+                    <button class="game-card reveal" data-game="memory-game" data-delay="100">
+                        <span class="game-icon">🧠</span>
+                        <span class="game-name">Memory</span>
+                    </button>
+
+                    <button class="game-card reveal" data-game="hangman" data-delay="150">
+                        <span class="game-icon">🔤</span>
+                        <span class="game-name">Ahorcado</span>
+                    </button>
+
+                    <button class="game-card reveal" data-game="dino-game" data-delay="200">
+                        <span class="game-icon">🦖</span>
+                        <span class="game-name">Dino Run</span>
+                    </button>
+
+                    <button class="game-card reveal" data-game="tic-tac-toe" data-delay="250">
+                        <span class="game-icon">⭕</span>
+                        <span class="game-name">Tres en Raya</span>
+                    </button>
+
+                    <button class="game-card reveal" data-game="minesweeper" data-delay="300">
+                        <span class="game-icon">💣</span>
+                        <span class="game-name">Buscaminas</span>
+                    </button>
+
+                    <button class="game-card reveal" data-game="connect4" data-delay="350">
+                        <span class="game-icon">🔴</span>
+                        <span class="game-name">Conecta 4</span>
+                    </button>
+                </div>
+
+                <!-- Game Container -->
+                <div class="game-container glass-card" id="game-container">
+                    <div class="game-welcome">
+                        <div class="welcome-icon">🎮</div>
+                        <h2>¡Bienvenido a los Juegos!</h2>
+                        <p>Selecciona un juego de arriba para comenzar</p>
+
+                        <div class="game-descriptions">
+                            <div class="game-desc-grid">
+                                <div class="game-desc">
+                                    <span>🎯</span>
+                                    <strong>Adivina el Número</strong>
+                                    <p>Adivina el número secreto entre 1 y 100</p>
+                                </div>
+                                <div class="game-desc">
+                                    <span>✌️</span>
+                                    <strong>Piedra, Papel, Tijera</strong>
+                                    <p>El clásico juego contra la computadora</p>
+                                </div>
+                                <div class="game-desc">
+                                    <span>🧠</span>
+                                    <strong>Memory</strong>
+                                    <p>Encuentra todas las parejas de cartas</p>
+                                </div>
+                                <div class="game-desc">
+                                    <span>🔤</span>
+                                    <strong>Ahorcado</strong>
+                                    <p>Adivina la palabra antes de perder</p>
+                                </div>
+                                <div class="game-desc">
+                                    <span>🦖</span>
+                                    <strong>Dino Run</strong>
+                                    <p>Salta y esquiva los obstáculos</p>
+                                </div>
+                                <div class="game-desc">
+                                    <span>⭕</span>
+                                    <strong>Tres en Raya</strong>
+                                    <p>Consigue tres en línea para ganar</p>
+                                </div>
+                                <div class="game-desc">
+                                    <span>💣</span>
+                                    <strong>Buscaminas</strong>
+                                    <p>Evita las minas usando tu lógica</p>
+                                </div>
+                                <div class="game-desc">
+                                    <span>🔴</span>
+                                    <strong>Conecta 4</strong>
+                                    <p>Alinea 4 fichas del mismo color</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="game-description">
-                <h3>🤔 Memory</h3>
-                <p>Encuentra todas las parejas de cartas. ¡Pon a prueba tu memoria!</p>
-            </div>
-            <div class="game-description">
-                <h3>🔤 Ahorcado</h3>
-                <p>Adivina la palabra antes de que se complete el dibujo del ahorcado.</p>
-            </div>
-            <div class="game-description">
-                <h3>🦖 Dino Run</h3>
-                <p>¡Salta y esquiva obstáculos en el clásico juego del dinosaurio de Chrome!</p>
-            </div>
-            <div class="game-description">
-                <h3>⭕ Tres en Raya ❌</h3>
-                <p>El clásico juego de X y O. ¡Consigue tres en línea para ganar!</p>
-            </div>
-            <div class="game-description">
-                <h3>💣 Buscaminas</h3>
-                <p>El clásico juego de evitar las minas. ¡Usa tu lógica para descubrir las casillas seguras!</p>
-            </div>
-            <div class="game-description">
-                <h3>🔴 Conecta 4 🟡</h3>
-                <p>El clásico juego de alinear 4 fichas del mismo color. ¡Juega contra otro jugador o contra la computadora!</p>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="./img/logo.png" alt="Gaming España" class="footer-logo">
+                    <p class="footer-tagline">Tu comunidad gamer desde 2023</p>
+                </div>
+                <nav class="footer-nav">
+                    <a href="./index.html">Inicio</a>
+                    <a href="./mapas.html">Mapas</a>
+                    <a href="./juegos.html">Juegos</a>
+                    <a href="./redes.html">Redes</a>
+                    <a href="./staff.html">Staff</a>
+                </nav>
+                <div class="footer-copyright">
+                    &copy; 2026 Gaming España. Todos los derechos reservados.
+                </div>
             </div>
         </div>
-    </div>
+    </footer>
+
+    <!-- Scripts -->
     <script src="./js/menu.js"></script>
+    <script src="./js/animations.js"></script>
     <script src="./js/juegos.js"></script>
 </body>
+
 </html>

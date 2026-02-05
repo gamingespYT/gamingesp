@@ -1,0 +1,11 @@
+# Gaming España - robots.txt
+# https://gamingespyt.github.io/gamingesp/
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://gamingespyt.github.io/gamingesp/sitemap.xml
+
+# Crawl-delay (optional, be nice to crawlers)
+Crawl-delay: 1

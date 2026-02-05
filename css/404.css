@@ -1,91 +1,265 @@
-.page_404 {
-  min-height: 100vh;              /* Ocupa toda la altura de la ventana */
-  display: flex;                  /* Flexbox para centrar */
-  align-items: center;            /* Centra verticalmente */
-  justify-content: center;        /* Centra horizontalmente */
-  padding: 0;                     /* Elimina el padding superior/inferior */
-  background: #fff;
-  font-family: 'Arvo', serif;
-}
+/*
+ * Gaming España - 404 Page Styles
+ * Version 2.0
+ */
 
-.page_404 img {
-  width: 100%;
-}
+/* ===================================
+   ERROR PAGE LAYOUT
+   =================================== */
 
-.four_zero_four_bg {
-  background-image: url(https://cdn.dribbble.com/users/285475/screenshots/2083086/dribbble_1.gif);
-  height: 400px;
-  background-position: center;
-  background-size: cover;
+.error-page {
+  min-height: 100vh;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
-  padding-top: 0; /* El texto queda arriba del todo */
+  padding: var(--space-2xl);
+  position: relative;
+  overflow: hidden;
 }
 
-.four_zero_four_bg h1 {
-  font-size: 80px;
-  margin: 0;
+.error-content {
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  max-width: 600px;
 }
 
-.contant_box_404 {
-  margin-top: -50px;
+/* ===================================
+   ERROR CODE (404)
+   =================================== */
+
+.error-code {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-lg);
+  margin-bottom: var(--space-2xl);
 }
 
-.link_404 {
-  color: #fff !important;
-  padding: 10px 20px;
-  background: #ff0000;
-  margin: 20px 0;
-  display: inline-block;
-  border-radius: 4px;
-  text-decoration: none;
-  font-weight: bold;
+.digit {
+  font-family: var(--font-heading);
+  font-size: clamp(5rem, 15vw, 10rem);
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+  animation: float 3s ease-in-out infinite;
 }
 
-.error_title {
-  font-size: 80px;
-  margin: 0 0 20px 0;
-  color: #222;
-  font-weight: bold;
+.digit:nth-child(1) {
+  animation-delay: 0s;
 }
 
-/* RESPONSIVE DESIGN */
-@media (max-width: 991px) {
-  .four_zero_four_bg {
+.digit:nth-child(3) {
+  animation-delay: 0.5s;
+}
+
+.digit.zero {
+  animation-delay: 0.25s;
+}
+
+.digit.zero img {
+  width: clamp(4rem, 12vw, 8rem);
+  height: auto;
+  filter: drop-shadow(0 0 30px var(--color-primary-glow));
+}
+
+/* ===================================
+   ERROR TEXT
+   =================================== */
+
+.error-title {
+  font-size: var(--text-3xl);
+  margin-bottom: var(--space-md);
+  color: var(--color-text-primary);
+}
+
+.error-description {
+  font-size: var(--text-lg);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-2xl);
+  line-height: 1.7;
+}
+
+/* ===================================
+   ERROR ACTIONS
+   =================================== */
+
+.error-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  justify-content: center;
+}
+
+/* ===================================
+   PARTICLES
+   =================================== */
+
+.particles {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: var(--color-primary);
+  border-radius: 50%;
+  opacity: 0.3;
+  animation: particle-float 8s ease-in-out infinite;
+}
+
+.particle:nth-child(1) {
+  top: 20%;
+  left: 10%;
+  animation-delay: 0s;
+  width: 8px;
+  height: 8px;
+}
+
+.particle:nth-child(2) {
+  top: 60%;
+  left: 80%;
+  animation-delay: 1s;
+  background: var(--color-secondary);
+  width: 12px;
+  height: 12px;
+}
+
+.particle:nth-child(3) {
+  top: 80%;
+  left: 20%;
+  animation-delay: 2s;
+  width: 6px;
+  height: 6px;
+}
+
+.particle:nth-child(4) {
+  top: 30%;
+  left: 70%;
+  animation-delay: 3s;
+  background: var(--color-accent-cyan);
+  width: 10px;
+  height: 10px;
+}
+
+.particle:nth-child(5) {
+  top: 50%;
+  left: 5%;
+  animation-delay: 4s;
+  background: var(--color-secondary);
+  width: 8px;
+  height: 8px;
+}
+
+@keyframes particle-float {
+
+  0%,
+  100% {
+    transform: translateY(0) translateX(0);
+    opacity: 0.3;
+  }
+
+  25% {
+    transform: translateY(-30px) translateX(10px);
+    opacity: 0.6;
+  }
+
+  50% {
+    transform: translateY(-10px) translateX(-10px);
+    opacity: 0.4;
+  }
+
+  75% {
+    transform: translateY(-40px) translateX(5px);
+    opacity: 0.5;
+  }
+}
+
+/* ===================================
+   BACKGROUND GLOWS
+   =================================== */
+
+.error-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.error-glow-1 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, var(--color-primary-glow) 0%, transparent 70%);
+  top: -100px;
+  right: -100px;
+  animation: float 10s ease-in-out infinite;
+}
+
+.error-glow-2 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, var(--color-secondary-glow) 0%, transparent 70%);
+  bottom: -100px;
+  left: -100px;
+  animation: float 12s ease-in-out infinite reverse;
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+@media (max-width: 768px) {
+  .error-code {
+    gap: var(--space-md);
+  }
+
+  .error-title {
+    font-size: var(--text-2xl);
+  }
+
+  .error-description {
+    font-size: var(--text-base);
+  }
+
+  .error-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .error-actions .btn {
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .error-glow-1 {
+    width: 300px;
+    height: 300px;
+  }
+
+  .error-glow-2 {
+    width: 250px;
     height: 250px;
-    padding-top: 0;
-  }
-  .four_zero_four_bg h1 {
-    font-size: 50px;
-  }
-  .contant_box_404 {
-    margin-top: -20px;
-  }
-  .error_title {
-    font-size: 50px;
-    margin-bottom: 15px;
   }
 }
 
-@media (max-width: 600px) {
-  .four_zero_four_bg {
-    height: 150px;
-    padding-top: 0;
+@media (max-width: 480px) {
+  .error-title {
+    font-size: var(--text-xl);
   }
-  .four_zero_four_bg h1 {
-    font-size: 32px;
-  }
-  .contant_box_404 {
-    margin-top: 0;
-    padding: 0 10px;
-  }
-  .link_404 {
-    padding: 8px 12px;
-    font-size: 15px;
-  }
-  .error_title {
-    font-size: 32px;
-    margin-bottom: 10px;
+
+  .error-actions .btn {
+    max-width: 100%;
   }
 }

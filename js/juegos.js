@@ -1,498 +1,477 @@
-// juegos.js
+/**
+ * Gaming España - Juegos Component
+ * Modern Game Selector with Mini Games
+ * Version 3.0 - Refactored
+ */
 
-// Selección del selector y contenedor del juego
+// ===================================
+// DOM REFERENCES
+// ===================================
 const gameSelector = document.getElementById('game-selector');
 const gameContainer = document.getElementById('game-container');
+const gameCards = document.querySelectorAll('.game-card');
 
-// Detectar el cambio en la selección del juego
-gameSelector.addEventListener('change', loadGame);
+// ===================================
+// GAME STATE
+// ===================================
+let currentGame = null;
 
-// Función para cargar el juego correspondiente
-function loadGame() {
-    const selectedGame = gameSelector.value;
-    gameContainer.innerHTML = ''; // Limpiar el contenedor
+// ===================================
+// GAME SELECTOR INITIALIZATION
+// ===================================
+gameCards.forEach(card => {
+    card.addEventListener('click', () => {
+        const gameName = card.dataset.game;
 
-    if (selectedGame === '') {
-        // Mostrar las descripciones de los juegos
-        gameContainer.innerHTML = `
-            <h2>¡Bienvenido a los Juegos!</h2>
-            <div class="game-descriptions">
-                <div class="game-description">
-                    <h3>🎯 Adivina el Número</h3>
-                    <p>Intenta adivinar el número secreto entre 1 y 100. ¡Te diremos si es mayor o menor!</p>
-                </div>
-                <div class="game-description">
-                    <h3>✌️ Piedra, Papel o Tijera</h3>
-                    <p>El clásico juego contra la computadora. ¡Elige sabiamente!</p>
-                </div>
-                <div class="game-description">
-                    <h3>🤔 Memory</h3>
-                    <p>Encuentra todas las parejas de cartas. ¡Pon a prueba tu memoria!</p>
-                </div>
-                <div class="game-description">
-                    <h3>🔤 Ahorcado</h3>
-                    <p>Adivina la palabra antes de que se complete el dibujo del ahorcado.</p>
-                </div>
-                <div class="game-description">
-                    <h3>🦖 Dino Run</h3>
-                    <p>¡Salta y esquiva obstáculos en el clásico juego del dinosaurio de Chrome!</p>
-                </div>
-                <div class="game-description">
-                    <h3>⭕ Tres en Raya ❌</h3>
-                    <p>El clásico juego de X y O. ¡Consigue tres en línea para ganar!</p>
-                </div>
-                <div class="game-description">
-                    <h3>💣 Buscaminas</h3>
-                    <p>El clásico juego de evitar las minas. ¡Usa tu lógica para descubrir las casillas seguras!</p>
-                </div>
-                <div class="game-description">
-                    <h3>🔴 Conecta 4 🟡</h3>
-                    <p>El clásico juego de alinear 4 fichas del mismo color. ¡Juega contra otro jugador o contra la computadora!</p>
-                </div>
-            </div>
-        `;
-    } else if (selectedGame === 'guess-number') {
-        loadGuessNumberGame();
-    } else if (selectedGame === 'rock-paper-scissors') {
-        loadRockPaperScissorsGame();
-    } else if (selectedGame === 'memory-game') {
-        loadMemoryGame();
-    } else if (selectedGame === 'hangman') {
-        loadHangmanGame();
-    } else if (selectedGame === 'dino-game') {
-        loadDinoGame();
-    } else if (selectedGame === 'tic-tac-toe') {
-        loadTicTacToeGame();
-    } else if (selectedGame === 'minesweeper') {
-    loadMinesweeperGame();
-    }else if (selectedGame === 'connect4') {
-        loadConnect4Game();
+        // Update visual state - use 'selected' instead of 'active' to avoid reveal conflict
+        gameCards.forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+
+        // Load the game
+        loadGame(gameName);
+    });
+});
+
+// ===================================
+// GAME LOADER
+// ===================================
+function loadGame(selectedGame) {
+    currentGame = selectedGame;
+    gameContainer.innerHTML = '';
+
+    // Animation trigger
+    gameContainer.style.animation = 'none';
+    gameContainer.offsetHeight;
+    gameContainer.style.animation = 'fadeIn 0.3s ease';
+
+    // Remove welcome screen class if present
+    gameContainer.classList.remove('has-welcome');
+
+    const games = {
+        'guess-number': loadGuessNumberGame,
+        'rock-paper-scissors': loadRockPaperScissorsGame,
+        'memory-game': loadMemoryGame,
+        'hangman': loadHangmanGame,
+        'dino-game': loadDinoGame,
+        'tic-tac-toe': loadTicTacToeGame,
+        'minesweeper': loadMinesweeperGame,
+        'connect4': loadConnect4Game
+    };
+
+    if (games[selectedGame]) {
+        games[selectedGame]();
     }
 }
 
-// Juego: Adivina el Número
-function loadGuessNumberGame() {
-    let numeroSecreto = Math.floor(Math.random() * 100) + 1;
-    let intentos = 0;
-
-    gameContainer.innerHTML = `
-        <h2>Adivina el Número</h2>
-        <p>Estoy pensando en un número entre 1 y 100. ¿Puedes adivinarlo?</p>
-        <input type="number" id="guess" placeholder="Escribe tu número" />
-        <button id="submit-btn">Adivinar</button>
-        <div id="resultado"></div>
-        <p>Intentos: <span id="contador">0</span></p>
+// ===================================
+// HELPER FUNCTIONS
+// ===================================
+function createGameHTML(title, content) {
+    return `
+        <div class="game-header">
+            <h2>${title}</h2>
+        </div>
+        <div class="game-content">
+            ${content}
+        </div>
     `;
+}
 
-    const submitBtn = document.getElementById('submit-btn');
-    const guessInput = document.getElementById('guess');
-    const resultadoDiv = document.getElementById('resultado');
-    const contadorDiv = document.getElementById('contador');
+// ===================================
+// GUESS NUMBER GAME
+// ===================================
+function loadGuessNumberGame() {
+    let secretNumber = Math.floor(Math.random() * 100) + 1;
+    let attempts = 0;
 
-    submitBtn.addEventListener('click', () => {
-        handleGuess();
-    });
+    gameContainer.innerHTML = createGameHTML('🎯 Adivina el Número', `
+        <p class="game-description">Estoy pensando en un número entre 1 y 100. ¿Puedes adivinarlo?</p>
+        <div class="game-input-group">
+            <input type="number" id="guess-input" placeholder="Tu número" min="1" max="100">
+            <button id="guess-btn" class="game-action-btn">Adivinar</button>
+        </div>
+        <div id="guess-result" class="game-result"></div>
+        <div class="game-stats">
+            <span class="stat">Intentos: <strong id="attempts-count">0</strong></span>
+        </div>
+        <button id="guess-reset" class="game-reset-btn">Nuevo Juego</button>
+    `);
 
-    guessInput.addEventListener('keypress', (event) => {
-        if (event.key === 'Enter') {
-            handleGuess();
-        }
-    });
+    const guessInput = document.getElementById('guess-input');
+    const guessBtn = document.getElementById('guess-btn');
+    const resultDiv = document.getElementById('guess-result');
+    const attemptsCount = document.getElementById('attempts-count');
+    const resetBtn = document.getElementById('guess-reset');
 
     function handleGuess() {
         const guess = parseInt(guessInput.value);
+
         if (isNaN(guess) || guess < 1 || guess > 100) {
-            resultadoDiv.textContent = 'Por favor, introduce un número válido entre 1 y 100.';
+            resultDiv.className = 'game-result warning';
+            resultDiv.textContent = 'Introduce un número válido entre 1 y 100';
             return;
         }
 
-        intentos++;
-        contadorDiv.textContent = intentos;
+        attempts++;
+        attemptsCount.textContent = attempts;
 
-        if (guess === numeroSecreto) {
-            resultadoDiv.textContent = `¡Felicidades! Has adivinado el número en ${intentos} intentos.`;
-        } else if (guess < numeroSecreto) {
-            resultadoDiv.textContent = 'El número es mayor, intenta de nuevo.';
+        if (guess === secretNumber) {
+            resultDiv.className = 'game-result success';
+            resultDiv.textContent = `¡Correcto! 🎉 Lo adivinaste en ${attempts} intentos`;
+            guessBtn.disabled = true;
+            guessInput.disabled = true;
+        } else if (guess < secretNumber) {
+            resultDiv.className = 'game-result info';
+            resultDiv.textContent = '📈 El número es MAYOR';
         } else {
-            resultadoDiv.textContent = 'El número es menor, intenta de nuevo.';
+            resultDiv.className = 'game-result info';
+            resultDiv.textContent = '📉 El número es MENOR';
         }
+
+        guessInput.value = '';
+        guessInput.focus();
     }
+
+    guessBtn.addEventListener('click', handleGuess);
+    guessInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') handleGuess();
+    });
+
+    resetBtn.addEventListener('click', () => loadGuessNumberGame());
+    guessInput.focus();
 }
 
-// Juego: Piedra, Papel o Tijera
-let playerWins = 0;
-let computerWins = 0;
+// ===================================
+// ROCK PAPER SCISSORS GAME
+// ===================================
+let rpsPlayerWins = 0;
+let rpsComputerWins = 0;
 
 function loadRockPaperScissorsGame() {
-    gameContainer.innerHTML = `
-        <h2>Piedra, Papel o Tijera</h2>
-        <p>Selecciona tu opción:</p>
-        <button class="choice-btn" data-choice="piedra">🪨 Piedra</button>
-        <button class="choice-btn" data-choice="papel">📄 Papel</button>
-        <button class="choice-btn" data-choice="tijera">✂️ Tijera</button>
-        <div id="resultado"></div>
-        <div id="score">
-            <p>Jugador: <span id="player-score">0</span> | Computadora: <span id="computer-score">0</span></p>
+    gameContainer.innerHTML = createGameHTML('✌️ Piedra, Papel o Tijera', `
+        <p class="game-description">Elige tu opción y desafía a la computadora</p>
+        <div class="rps-choices">
+            <button class="rps-btn" data-choice="piedra">🪨<span>Piedra</span></button>
+            <button class="rps-btn" data-choice="papel">📄<span>Papel</span></button>
+            <button class="rps-btn" data-choice="tijera">✂️<span>Tijera</span></button>
         </div>
-    `;
+        <div id="rps-result" class="game-result"></div>
+        <div class="game-stats rps-score">
+            <span class="stat player-stat">Tú: <strong id="player-score">${rpsPlayerWins}</strong></span>
+            <span class="stat-divider">vs</span>
+            <span class="stat computer-stat">CPU: <strong id="computer-score">${rpsComputerWins}</strong></span>
+        </div>
+        <button id="rps-reset" class="game-reset-btn">Reiniciar Puntuación</button>
+    `);
 
-    const choiceButtons = document.querySelectorAll('.choice-btn');
-    const resultadoDiv = document.getElementById('resultado');
-    const playerScore = document.getElementById('player-score');
-    const computerScore = document.getElementById('computer-score');
+    const choiceButtons = document.querySelectorAll('.rps-btn');
+    const resultDiv = document.getElementById('rps-result');
+    const playerScoreEl = document.getElementById('player-score');
+    const computerScoreEl = document.getElementById('computer-score');
+    const resetBtn = document.getElementById('rps-reset');
 
-    choiceButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const userChoice = button.getAttribute('data-choice');
-            const computerChoice = ['piedra', 'papel', 'tijera'][Math.floor(Math.random() * 3)];
+    choiceButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const userChoice = btn.dataset.choice;
+            const choices = ['piedra', 'papel', 'tijera'];
+            const computerChoice = choices[Math.floor(Math.random() * 3)];
 
-            // Determinar el ganador
+            const emojis = { piedra: '🪨', papel: '📄', tijera: '✂️' };
+
             if (userChoice === computerChoice) {
-                resultadoDiv.textContent = `Empate! Ambos eligieron ${userChoice}.`;
+                resultDiv.className = 'game-result info';
+                resultDiv.innerHTML = `${emojis[userChoice]} vs ${emojis[computerChoice]} - ¡Empate!`;
             } else if (
                 (userChoice === 'piedra' && computerChoice === 'tijera') ||
                 (userChoice === 'papel' && computerChoice === 'piedra') ||
                 (userChoice === 'tijera' && computerChoice === 'papel')
             ) {
-                playerWins++;
-                playerScore.textContent = playerWins;
-                resultadoDiv.textContent = `¡Ganaste! ${userChoice.charAt(0).toUpperCase() + userChoice.slice(1)} vence a ${computerChoice}.`;
+                rpsPlayerWins++;
+                playerScoreEl.textContent = rpsPlayerWins;
+                resultDiv.className = 'game-result success';
+                resultDiv.innerHTML = `${emojis[userChoice]} vs ${emojis[computerChoice]} - ¡Ganaste! 🎉`;
             } else {
-                computerWins++;
-                computerScore.textContent = computerWins;
-                resultadoDiv.textContent = `Perdiste! ${computerChoice.charAt(0).toUpperCase() + computerChoice.slice(1)} vence a ${userChoice}.`;
+                rpsComputerWins++;
+                computerScoreEl.textContent = rpsComputerWins;
+                resultDiv.className = 'game-result error';
+                resultDiv.innerHTML = `${emojis[userChoice]} vs ${emojis[computerChoice]} - ¡Perdiste!`;
             }
         });
     });
+
+    resetBtn.addEventListener('click', () => {
+        rpsPlayerWins = 0;
+        rpsComputerWins = 0;
+        playerScoreEl.textContent = 0;
+        computerScoreEl.textContent = 0;
+        resultDiv.className = 'game-result';
+        resultDiv.textContent = '';
+    });
 }
 
+// ===================================
+// MEMORY GAME
+// ===================================
 function loadMemoryGame() {
-    const cards = [
-        '🎮', '🎮', '🕹️', '🕹️', '🎲', '🎲', '🎯', '🎯', 
-        '⚔️', '⚔️', '🛡️', '🛡️', '🔫', '🔫', '🚀', '🚀'
-    ];
-    let shuffledCards = cards.sort(() => Math.random() - 0.5);
+    const emojis = ['🎮', '🕹️', '🎲', '🎯', '⚔️', '🛡️', '🔫', '🚀'];
+    const cards = [...emojis, ...emojis].sort(() => Math.random() - 0.5);
     let flippedCards = [];
-    let matchedCards = 0;
+    let matchedPairs = 0;
+    let moves = 0;
     let canFlip = true;
 
-    gameContainer.innerHTML = `
-        <h2>Juego de Memoria</h2>
-        <p>¡Encuentra las parejas de cartas!</p>
-        <div id="memory-board" class="memory-board">
-            ${shuffledCards.map((card, index) => `<div class="memory-card hidden" data-card="${card}" data-index="${index}">${card}</div>`).join('')}
+    gameContainer.innerHTML = createGameHTML('🧠 Memory', `
+        <p class="game-description">Encuentra todas las parejas de cartas</p>
+        <div class="memory-board">
+            ${cards.map((card, i) => `
+                <div class="memory-card" data-card="${card}" data-index="${i}">
+                    <div class="memory-card-inner">
+                        <div class="memory-card-front">?</div>
+                        <div class="memory-card-back">${card}</div>
+                    </div>
+                </div>
+            `).join('')}
         </div>
-        <p>Cartas emparejadas: <span id="matched-count">0</span></p>
-        <p id="game-status"></p>
-    `;
+        <div class="game-stats">
+            <span class="stat">Movimientos: <strong id="memory-moves">0</strong></span>
+            <span class="stat">Parejas: <strong id="memory-pairs">0</strong>/8</span>
+        </div>
+        <div id="memory-result" class="game-result"></div>
+        <button id="memory-reset" class="game-reset-btn">Nuevo Juego</button>
+    `);
 
-    const memoryBoard = document.getElementById('memory-board');
-    const matchedCount = document.getElementById('matched-count');
-    const gameStatus = document.getElementById('game-status');
-    const cards_elements = document.querySelectorAll('.memory-card');
+    const cardElements = document.querySelectorAll('.memory-card');
+    const movesEl = document.getElementById('memory-moves');
+    const pairsEl = document.getElementById('memory-pairs');
+    const resultEl = document.getElementById('memory-result');
+    const resetBtn = document.getElementById('memory-reset');
 
-    // Añadir interactive inmediatamente para poder empezar a jugar
-    memoryBoard.classList.add('interactive');
+    cardElements.forEach(card => {
+        card.addEventListener('click', () => {
+            if (!canFlip || card.classList.contains('flipped') || card.classList.contains('matched')) return;
 
-    memoryBoard.addEventListener('click', (e) => {
-        if (!memoryBoard.classList.contains('interactive') || !canFlip) return;
-        
-        const clickedCard = e.target;
-        if (clickedCard.classList.contains('memory-card') && 
-            !flippedCards.includes(clickedCard) && 
-            clickedCard.classList.contains('hidden')) {
-            
-            clickedCard.classList.remove('hidden');
-            flippedCards.push(clickedCard);
+            card.classList.add('flipped');
+            flippedCards.push(card);
 
             if (flippedCards.length === 2) {
+                moves++;
+                movesEl.textContent = moves;
                 canFlip = false;
+
                 const [card1, card2] = flippedCards;
 
-                if (card1.getAttribute('data-card') === card2.getAttribute('data-card')) {
-                    matchedCards++;
-                    matchedCount.textContent = matchedCards;
+                if (card1.dataset.card === card2.dataset.card) {
+                    card1.classList.add('matched');
+                    card2.classList.add('matched');
+                    matchedPairs++;
+                    pairsEl.textContent = matchedPairs;
                     flippedCards = [];
                     canFlip = true;
 
-                    if (matchedCards === cards.length / 2) {
-                        gameStatus.textContent = '¡Felicidades! ¡Has ganado!';
+                    if (matchedPairs === 8) {
+                        resultEl.className = 'game-result success';
+                        resultEl.textContent = `¡Ganaste en ${moves} movimientos! 🎉`;
                     }
                 } else {
                     setTimeout(() => {
-                        card1.classList.add('hidden');
-                        card2.classList.add('hidden');
+                        card1.classList.remove('flipped');
+                        card2.classList.remove('flipped');
                         flippedCards = [];
                         canFlip = true;
                     }, 1000);
                 }
             }
-        }
+        });
     });
+
+    resetBtn.addEventListener('click', () => loadMemoryGame());
 }
 
-// Juego: Ahorcado
+// ===================================
+// HANGMAN GAME
+// ===================================
 function loadHangmanGame() {
-    const words = [
-        'fortnite',
-        'llama',
-        'pico',
-        'skin',
-        'emote',
-        'escuadron',
-        'tormenta',
-        'videojuegos',
-        'gamer',
-        'joystick',
-        'pixel',
-        'multijugador',
-        'noob',
-        'lag',
-        'competitividad'
-    ];
+    const words = ['fortnite', 'gaming', 'espana', 'videojuegos', 'gamer', 'joystick', 'jugador', 'partida', 'victoria', 'streaming'];
     const word = words[Math.floor(Math.random() * words.length)];
     let guessedLetters = [];
     let mistakes = 0;
     const maxMistakes = 6;
 
-    const hangmanStages = [
-        `
-      
-      
-      
-      
-      
-      
-=========`,
-        `
-      |
-      |
-      |
-      |
-      |
-      |
-=========`,
-        `
-  +---+
-      |
-      |
-      |
-      |
-      |
-=========`,
-        `
-  +---+
-  |   |
-      |
-      |
-      |
-      |
-=========`,
-        `
-  +---+
-  |   |
-  😮  |
-      |
-      |
-      |
-=========`,
-        `
-  +---+
-  |   |
-  😮  |
- /|\\  |
-      |
-      |
-=========`,
-        `
-  +---+
-  |   |
-  😵  |
- /|\\  |
- / \\  |
-      |
-=========`
-    ];
+    function renderWord() {
+        return word.split('').map(letter =>
+            guessedLetters.includes(letter) ? letter : '_'
+        ).join(' ');
+    }
 
-    // Agregar el HTML necesario
-    gameContainer.innerHTML = `
-        <h2>Ahorcado</h2>
-        <div id="hangman-drawing" class="hangman-drawing"></div>
-        <div id="word-display" class="word-display"></div>
-        <div class="controls">
-            <input type="text" id="letter-input" maxlength="1" placeholder="Ingresa una letra">
-            <button id="guess-btn">Adivinar</button>
+    function getHangmanSVG(errors) {
+        const parts = [
+            errors >= 1 ? '<circle cx="50" cy="25" r="10" stroke="currentColor" stroke-width="2" fill="none"/>' : '', // cabeza
+            errors >= 2 ? '<line x1="50" y1="35" x2="50" y2="60" stroke="currentColor" stroke-width="2"/>' : '', // cuerpo
+            errors >= 3 ? '<line x1="50" y1="40" x2="35" y2="55" stroke="currentColor" stroke-width="2"/>' : '', // brazo izq
+            errors >= 4 ? '<line x1="50" y1="40" x2="65" y2="55" stroke="currentColor" stroke-width="2"/>' : '', // brazo der
+            errors >= 5 ? '<line x1="50" y1="60" x2="35" y2="80" stroke="currentColor" stroke-width="2"/>' : '', // pierna izq
+            errors >= 6 ? '<line x1="50" y1="60" x2="65" y2="80" stroke="currentColor" stroke-width="2"/>' : '', // pierna der
+        ];
+
+        return `
+            <svg viewBox="0 0 100 100" class="hangman-svg">
+                <!-- Estructura -->
+                <line x1="10" y1="95" x2="40" y2="95" stroke="currentColor" stroke-width="2"/>
+                <line x1="25" y1="95" x2="25" y2="5" stroke="currentColor" stroke-width="2"/>
+                <line x1="25" y1="5" x2="50" y2="5" stroke="currentColor" stroke-width="2"/>
+                <line x1="50" y1="5" x2="50" y2="15" stroke="currentColor" stroke-width="2"/>
+                ${parts.join('')}
+            </svg>
+        `;
+    }
+
+    gameContainer.innerHTML = createGameHTML('🔤 Ahorcado', `
+        <div class="hangman-figure" id="hangman-figure">${getHangmanSVG(0)}</div>
+        <div class="hangman-word" id="hangman-word">${renderWord()}</div>
+        <div class="hangman-keyboard" id="hangman-keyboard">
+            ${'abcdefghijklmnñopqrstuvwxyz'.split('').map(letter =>
+        `<button class="keyboard-key" data-letter="${letter}">${letter.toUpperCase()}</button>`
+    ).join('')}
         </div>
-        <div id="used-letters">Letras usadas: </div>
-        <div id="hangman-status"></div>
-    `;
+        <div class="game-stats">
+            <span class="stat">Errores: <strong id="hangman-mistakes">0</strong>/${maxMistakes}</span>
+        </div>
+        <div id="hangman-result" class="game-result"></div>
+        <button id="hangman-reset" class="game-reset-btn">Nueva Palabra</button>
+    `);
 
-    // Obtener referencias a los elementos del DOM
-    const hangmanDrawing = document.getElementById('hangman-drawing');
-    const wordDisplay = document.getElementById('word-display');
-    const letterInput = document.getElementById('letter-input');
-    const guessBtn = document.getElementById('guess-btn');
-    const usedLetters = document.getElementById('used-letters');
-    const hangmanStatus = document.getElementById('hangman-status');
+    const figureEl = document.getElementById('hangman-figure');
+    const wordEl = document.getElementById('hangman-word');
+    const mistakesEl = document.getElementById('hangman-mistakes');
+    const resultEl = document.getElementById('hangman-result');
+    const keyboard = document.getElementById('hangman-keyboard');
+    const resetBtn = document.getElementById('hangman-reset');
 
-    function updateWordDisplay() {
-        wordDisplay.textContent = word.split('').map(letter => 
-            guessedLetters.includes(letter) ? letter : '_').join(' ');
-    }
+    keyboard.addEventListener('click', (e) => {
+        if (!e.target.classList.contains('keyboard-key') || e.target.disabled) return;
 
-    function updateHangmanDrawing() {
-        hangmanDrawing.textContent = hangmanStages[mistakes];
-    }
-
-    function checkGameStatus() {
-        if (mistakes >= maxMistakes) {
-            hangmanStatus.textContent = `¡Perdiste! La palabra era "${word}".`;
-            guessBtn.disabled = true;
-            letterInput.disabled = true;
-        } else if (word.split('').every(letter => guessedLetters.includes(letter))) {
-            hangmanStatus.textContent = '¡Felicidades! Has adivinado la palabra.';
-            guessBtn.disabled = true;
-            letterInput.disabled = true;
-        }
-    }
-
-    guessBtn.addEventListener('click', () => {
-        const letter = letterInput.value.toLowerCase();
-        letterInput.value = '';
-
-        if (!letter || guessedLetters.includes(letter)) {
-            return;
-        }
-
+        const letter = e.target.dataset.letter;
+        e.target.disabled = true;
         guessedLetters.push(letter);
-        usedLetters.textContent = 'Letras usadas: ' + guessedLetters.join(', ');
 
         if (word.includes(letter)) {
-            updateWordDisplay();
+            e.target.classList.add('correct');
+            wordEl.textContent = renderWord();
+
+            if (!wordEl.textContent.includes('_')) {
+                resultEl.className = 'game-result success';
+                resultEl.textContent = '¡Ganaste! 🎉';
+                disableKeyboard();
+            }
         } else {
+            e.target.classList.add('wrong');
             mistakes++;
-            updateHangmanDrawing();
-        }
+            mistakesEl.textContent = mistakes;
+            figureEl.innerHTML = getHangmanSVG(mistakes);
 
-        checkGameStatus();
+            if (mistakes >= maxMistakes) {
+                resultEl.className = 'game-result error';
+                resultEl.textContent = `¡Perdiste! La palabra era: ${word.toUpperCase()}`;
+                wordEl.textContent = word.split('').join(' ');
+                disableKeyboard();
+            }
+        }
     });
 
-    letterInput.addEventListener('keypress', (event) => {
-        if (event.key === 'Enter') {
-            guessBtn.click();
-        }
-    });
-
-    updateHangmanDrawing();
-    updateWordDisplay();
-}
-
-function loadDinoGame() {
-    gameContainer.innerHTML = `
-        <h2>Juego del Dinosaurio</h2>
-        <div class="dino-container">
-            <iframe src="https://chromedino.com/" frameborder="0" scrolling="no" width="100%" height="400px" loading="lazy"></iframe>
-        </div>
-        <div class="dino-link">
-            <span class="copy-text" onclick="copyDinoURL()">¿No carga? Abre una nueva pestaña en Chrome y escribe: chrome://dino</span>
-        </div>
-    `;
-
-    // Función para copiar al portapapeles
-    window.copyDinoURL = function() {
-        navigator.clipboard.writeText('chrome://dino').then(() => {
-            const copyText = document.querySelector('.copy-text');
-            const originalText = copyText.textContent;
-            copyText.textContent = '¡Copiado al portapapeles!';
-            setTimeout(() => {
-                copyText.textContent = originalText;
-            }, 2000);
-        }).catch(err => {
-            console.error('Error al copiar: ', err);
-        });
+    function disableKeyboard() {
+        keyboard.querySelectorAll('.keyboard-key').forEach(key => key.disabled = true);
     }
+
+    resetBtn.addEventListener('click', () => loadHangmanGame());
 }
 
+// ===================================
+// DINO GAME
+// ===================================
+function loadDinoGame() {
+    gameContainer.innerHTML = createGameHTML('🦖 Dino Run', `
+        <p class="game-description">El clásico juego del dinosaurio de Chrome</p>
+        <div class="dino-frame">
+            <iframe 
+                src="https://chromedino.com/" 
+                frameborder="0" 
+                scrolling="no"
+                loading="lazy">
+            </iframe>
+        </div>
+        <div class="dino-tip">
+            <p>💡 ¿No carga? Abre <code>chrome://dino</code> en Chrome</p>
+        </div>
+    `);
+}
+
+// ===================================
+// TIC TAC TOE GAME
+// ===================================
 function loadTicTacToeGame() {
+    let board = Array(9).fill('');
     let currentPlayer = 'X';
-    let gameBoard = ['', '', '', '', '', '', '', '', ''];
     let gameActive = true;
     let vsComputer = false;
-    let difficulty = 'easy';
+    let difficulty = 'medium';
 
-    gameContainer.innerHTML = `
-        <h2>Tres en Raya</h2>
-        <div class="game-mode-selector">
-            <button class="mode-btn active" data-mode="2p">2 Jugadores</button>
-            <button class="mode-btn" data-mode="1p">1 Jugador</button>
-        </div>
-        <div class="difficulty-selector" style="display: none;">
-            <button class="diff-btn" data-diff="easy">Fácil</button>
-            <button class="diff-btn" data-diff="hard">Medio</button>
-            <button class="diff-btn" data-diff="impossible">Imposible</button>
-        </div>
-        <div class="game-status"></div>
-        <div class="tic-tac-toe">
-            ${Array(9).fill('').map((_, i) => `
-                <div class="cell" data-index="${i}"></div>
-            `).join('')}
-        </div>
-        <button class="reset-button">Reiniciar Juego</button>
-    `;
-
-    const gameStatus = gameContainer.querySelector('.game-status');
-    const cells = gameContainer.querySelectorAll('.cell');
-    const resetButton = gameContainer.querySelector('.reset-button');
-    const modeButtons = gameContainer.querySelectorAll('.mode-btn');
-    const difficultySelector = gameContainer.querySelector('.difficulty-selector');
-    const difficultyButtons = gameContainer.querySelectorAll('.diff-btn');
-
-    const winningConditions = [
-        [0, 1, 2], [3, 4, 5], [6, 7, 8], // Filas
-        [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columnas
-        [0, 4, 8], [2, 4, 6] // Diagonales
+    const winPatterns = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8],
+        [0, 3, 6], [1, 4, 7], [2, 5, 8],
+        [0, 4, 8], [2, 4, 6]
     ];
+
+    gameContainer.innerHTML = createGameHTML('⭕ Tres en Raya', `
+        <div class="ttt-modes">
+            <button class="ttt-mode-btn active" data-mode="2p">👥 2 Jugadores</button>
+            <button class="ttt-mode-btn" data-mode="1p">🤖 vs CPU</button>
+        </div>
+        <div class="ttt-difficulty" id="ttt-difficulty" style="display: none;">
+            <button class="ttt-diff-btn" data-diff="easy">Fácil</button>
+            <button class="ttt-diff-btn active" data-diff="medium">Medio</button>
+            <button class="ttt-diff-btn" data-diff="hard">Difícil</button>
+        </div>
+        <div id="ttt-status" class="game-status-text">Turno de X</div>
+        <div class="ttt-board" id="ttt-board">
+            ${Array(9).fill('').map((_, i) => `<div class="ttt-cell" data-index="${i}"></div>`).join('')}
+        </div>
+        <button id="ttt-reset" class="game-reset-btn">Nuevo Juego</button>
+    `);
+
+    const boardEl = document.getElementById('ttt-board');
+    const cells = boardEl.querySelectorAll('.ttt-cell');
+    const statusEl = document.getElementById('ttt-status');
+    const modeButtons = document.querySelectorAll('.ttt-mode-btn');
+    const difficultyEl = document.getElementById('ttt-difficulty');
+    const diffButtons = document.querySelectorAll('.ttt-diff-btn');
+    const resetBtn = document.getElementById('ttt-reset');
+
+    function checkWinner() {
+        for (const pattern of winPatterns) {
+            const [a, b, c] = pattern;
+            if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                return board[a];
+            }
+        }
+        return board.includes('') ? null : 'tie';
+    }
 
     function computerMove() {
         if (!gameActive) return;
 
-        let index;
-        switch (difficulty) {
-            case 'impossible':
-                index = getBestMove();
-                break;
-            case 'hard':
-                // 85% de probabilidad de movimiento inteligente
-                index = Math.random() < 0.85 ? getBestMove() : getRandomMove();
-                break;
-            default: // easy
-                // 60% de probabilidad de movimiento inteligente
-                index = Math.random() < 0.6 ? getBestMove() : getRandomMove();
+        let move;
+        const random = Math.random();
+
+        if (difficulty === 'hard' || (difficulty === 'medium' && random < 0.7)) {
+            move = getBestMove();
+        } else {
+            const empty = board.map((v, i) => v === '' ? i : null).filter(v => v !== null);
+            move = empty[Math.floor(Math.random() * empty.length)];
         }
 
         setTimeout(() => {
-            if (index !== null) {
-                const cell = cells[index];
-                gameBoard[index] = 'O';
-                cell.textContent = 'O';
-                cell.classList.add('o');
-
-                if (checkWin()) {
-                    gameStatus.textContent = '¡La computadora ha ganado!';
-                    gameActive = false;
-                    return;
-                }
-
-                if (checkDraw()) {
-                    gameStatus.textContent = '¡Empate!';
-                    gameActive = false;
-                    return;
-                }
-
-                currentPlayer = 'X';
-                gameStatus.textContent = 'Tu turno';
-            }
-        }, 500);
+            if (move !== undefined) makeMove(move);
+        }, 400);
     }
 
     function getBestMove() {
@@ -500,10 +479,10 @@ function loadTicTacToeGame() {
         let bestMove;
 
         for (let i = 0; i < 9; i++) {
-            if (gameBoard[i] === '') {
-                gameBoard[i] = 'O';
-                let score = minimax(gameBoard, 0, false);
-                gameBoard[i] = '';
+            if (board[i] === '') {
+                board[i] = 'O';
+                let score = minimax(board, 0, false);
+                board[i] = '';
                 if (score > bestScore) {
                     bestScore = score;
                     bestMove = i;
@@ -513,222 +492,170 @@ function loadTicTacToeGame() {
         return bestMove;
     }
 
-    function minimax(board, depth, isMaximizing) {
-        let winner = checkWinForMinimax();
-        if (winner !== null) {
-            return winner === 'O' ? 1 : -1;
-        }
-        if (checkDraw()) return 0;
+    function minimax(b, depth, isMax) {
+        const winner = checkWinner();
+        if (winner === 'O') return 10 - depth;
+        if (winner === 'X') return depth - 10;
+        if (winner === 'tie') return 0;
 
-        if (isMaximizing) {
-            let bestScore = -Infinity;
+        if (isMax) {
+            let best = -Infinity;
             for (let i = 0; i < 9; i++) {
-                if (board[i] === '') {
-                    board[i] = 'O';
-                    let score = minimax(board, depth + 1, false);
-                    board[i] = '';
-                    bestScore = Math.max(score, bestScore);
+                if (b[i] === '') {
+                    b[i] = 'O';
+                    best = Math.max(best, minimax(b, depth + 1, false));
+                    b[i] = '';
                 }
             }
-            return bestScore;
+            return best;
         } else {
-            let bestScore = Infinity;
+            let best = Infinity;
             for (let i = 0; i < 9; i++) {
-                if (board[i] === '') {
-                    board[i] = 'X';
-                    let score = minimax(board, depth + 1, true);
-                    board[i] = '';
-                    bestScore = Math.min(score, bestScore);
+                if (b[i] === '') {
+                    b[i] = 'X';
+                    best = Math.min(best, minimax(b, depth + 1, true));
+                    b[i] = '';
                 }
             }
-            return bestScore;
+            return best;
         }
     }
 
-    function getRandomMove() {
-        const emptyCells = gameBoard.reduce((acc, cell, index) => {
-            if (cell === '') acc.push(index);
-            return acc;
-        }, []);
-        return emptyCells[Math.floor(Math.random() * emptyCells.length)];
-    }
+    function makeMove(index) {
+        if (board[index] !== '' || !gameActive) return;
 
-    function handleCellClick(e) {
-        const cell = e.target;
-        const index = cell.getAttribute('data-index');
+        board[index] = currentPlayer;
+        cells[index].textContent = currentPlayer;
+        cells[index].classList.add(currentPlayer.toLowerCase());
 
-        if (gameBoard[index] !== '' || !gameActive) return;
-        if (vsComputer && currentPlayer === 'O') return;
-
-        gameBoard[index] = currentPlayer;
-        cell.textContent = currentPlayer;
-        cell.classList.add(currentPlayer.toLowerCase());
-
-        if (checkWin()) {
-            gameStatus.textContent = `¡${vsComputer ? 'Has ganado!' : 'Jugador ' + currentPlayer + ' ha ganado!'}`;
+        const winner = checkWinner();
+        if (winner) {
             gameActive = false;
-            return;
-        }
-
-        if (checkDraw()) {
-            gameStatus.textContent = '¡Empate!';
-            gameActive = false;
+            if (winner === 'tie') {
+                statusEl.textContent = '¡Empate!';
+            } else {
+                statusEl.textContent = vsComputer ?
+                    (winner === 'X' ? '¡Ganaste! 🎉' : '¡Perdiste!') :
+                    `¡Jugador ${winner} gana! 🎉`;
+            }
             return;
         }
 
         currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-        gameStatus.textContent = vsComputer ? 
-            (currentPlayer === 'X' ? 'Tu turno' : 'Turno de la computadora') : 
-            `Turno del jugador ${currentPlayer}`;
+        statusEl.textContent = vsComputer ?
+            (currentPlayer === 'X' ? 'Tu turno (X)' : 'Turno de CPU...') :
+            `Turno de ${currentPlayer}`;
 
         if (vsComputer && currentPlayer === 'O') {
             computerMove();
         }
     }
 
-    function checkWin() {
-        return winningConditions.some(condition => {
-            return condition.every(index => gameBoard[index] === currentPlayer);
+    cells.forEach(cell => {
+        cell.addEventListener('click', () => {
+            if (vsComputer && currentPlayer === 'O') return;
+            makeMove(parseInt(cell.dataset.index));
         });
-    }
+    });
 
-    function checkWinForMinimax() {
-        for (let condition of winningConditions) {
-            if (condition.every(index => gameBoard[index] === 'O')) return 'O';
-            if (condition.every(index => gameBoard[index] === 'X')) return 'X';
-        }
-        return null;
-    }
+    modeButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            modeButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            vsComputer = btn.dataset.mode === '1p';
+            difficultyEl.style.display = vsComputer ? 'flex' : 'none';
+            resetGame();
+        });
+    });
 
-    function checkDraw() {
-        return gameBoard.every(cell => cell !== '');
-    }
+    diffButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            diffButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            difficulty = btn.dataset.diff;
+            resetGame();
+        });
+    });
 
     function resetGame() {
+        board = Array(9).fill('');
         currentPlayer = 'X';
-        gameBoard = ['', '', '', '', '', '', '', '', ''];
         gameActive = true;
-        gameStatus.textContent = vsComputer ? 'Tu turno' : `Turno del jugador ${currentPlayer}`;
         cells.forEach(cell => {
             cell.textContent = '';
             cell.classList.remove('x', 'o');
         });
+        statusEl.textContent = vsComputer ? 'Tu turno (X)' : 'Turno de X';
     }
 
-    // Event Listeners
-    cells.forEach(cell => {
-        cell.addEventListener('click', handleCellClick);
-    });
-
-    resetButton.addEventListener('click', resetGame);
-
-    modeButtons.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            modeButtons.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            vsComputer = btn.getAttribute('data-mode') === '1p';
-            difficultySelector.style.display = vsComputer ? 'block' : 'none';
-            resetGame();
-        });
-    });
-
-    difficultyButtons.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            difficultyButtons.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            difficulty = btn.getAttribute('data-diff');
-            resetGame();
-        });
-    });
-
-    // Inicializar el estado del juego
-    gameStatus.textContent = 'Turno del jugador X';
+    resetBtn.addEventListener('click', resetGame);
 }
+
+// ===================================
+// MINESWEEPER GAME
+// ===================================
 function loadMinesweeperGame() {
-    const GRID_SIZE = 10;
-    const MINES_COUNT = 15;
+    const GRID = 8;
+    const MINES = 10;
     let grid = [];
     let revealed = [];
     let flagged = [];
     let gameOver = false;
-    let minesLeft = MINES_COUNT;
-    let safeCellsLeft = GRID_SIZE * GRID_SIZE - MINES_COUNT;
-    let isFirstClick = true;
+    let firstClick = true;
+    let safeCells = GRID * GRID - MINES;
 
-    gameContainer.innerHTML = `
-    <h2>Buscaminas</h2>
-    <div style="margin-top: 5px;">
-        <div class="game-info">
-            <span>Minas restantes: <span id="mines-left">${minesLeft}</span></span>
-        </div>
-        <div class="minesweeper-grid"></div>
-        <button id="reset-minesweeper" class="reset-button">Nuevo Juego</button>
-        <div class="instructions">
-            <p>🖱️ Click izquierdo: Revelar casilla</p>
-            <p>🚩 Click derecho: Marcar/Desmarcar bandera</p>
-        </div>
-        <div id="game-message"></div>
-    </div>
-`;
-
-    const minesweeperGrid = gameContainer.querySelector('.minesweeper-grid');
-    const minesLeftDisplay = gameContainer.querySelector('#mines-left');
-    const resetButton = gameContainer.querySelector('#reset-minesweeper');
-    const gameMessage = gameContainer.querySelector('#game-message');
-
-    function initializeGame() {
-        grid = Array(GRID_SIZE).fill().map(() => Array(GRID_SIZE).fill(0));
-        revealed = Array(GRID_SIZE).fill().map(() => Array(GRID_SIZE).fill(false));
-        flagged = Array(GRID_SIZE).fill().map(() => Array(GRID_SIZE).fill(false));
+    function init() {
+        grid = Array(GRID).fill().map(() => Array(GRID).fill(0));
+        revealed = Array(GRID).fill().map(() => Array(GRID).fill(false));
+        flagged = Array(GRID).fill().map(() => Array(GRID).fill(false));
         gameOver = false;
-        minesLeft = MINES_COUNT;
-        safeCellsLeft = GRID_SIZE * GRID_SIZE - MINES_COUNT;
-        isFirstClick = true;
-        minesLeftDisplay.textContent = minesLeft;
-        
-        // Limpiar mensaje y restaurar instrucciones
-        gameMessage.textContent = '';
-        gameMessage.className = ''; // Elimina las clases de estilo del mensaje
-        
-        // Mostrar las instrucciones nuevamente
-        const instructions = gameContainer.querySelector('.instructions');
-        if (instructions) {
-            instructions.style.display = 'block';
-        }
-        
+        firstClick = true;
+        safeCells = GRID * GRID - MINES;
+
+        gameContainer.innerHTML = createGameHTML('💣 Buscaminas', `
+            <div class="mines-info">
+                <span>🚩 Minas: <strong id="mines-count">${MINES}</strong></span>
+            </div>
+            <div class="mines-grid" id="mines-grid"></div>
+            <div class="mines-help">
+                <p>🖱️ Click = Revelar | Click derecho = Bandera</p>
+            </div>
+            <div id="mines-result" class="game-result"></div>
+            <button id="mines-reset" class="game-reset-btn">Nuevo Juego</button>
+        `);
+
         renderGrid();
+
+        document.getElementById('mines-reset').addEventListener('click', init);
     }
 
-    function placeMines(firstX, firstY) {
-        let minesPlaced = 0;
-        while (minesPlaced < MINES_COUNT) {
-            const x = Math.floor(Math.random() * GRID_SIZE);
-            const y = Math.floor(Math.random() * GRID_SIZE);
-            if (grid[y][x] !== -1 && 
-                (Math.abs(x - firstX) > 1 || Math.abs(y - firstY) > 1)) {
+    function placeMines(safeX, safeY) {
+        let placed = 0;
+        while (placed < MINES) {
+            const x = Math.floor(Math.random() * GRID);
+            const y = Math.floor(Math.random() * GRID);
+            if (grid[y][x] !== -1 && (Math.abs(x - safeX) > 1 || Math.abs(y - safeY) > 1)) {
                 grid[y][x] = -1;
-                minesPlaced++;
+                placed++;
             }
         }
 
-        // Calculate numbers
-        for (let y = 0; y < GRID_SIZE; y++) {
-            for (let x = 0; x < GRID_SIZE; x++) {
+        for (let y = 0; y < GRID; y++) {
+            for (let x = 0; x < GRID; x++) {
                 if (grid[y][x] !== -1) {
-                    grid[y][x] = countAdjacentMines(x, y);
+                    grid[y][x] = countMines(x, y);
                 }
             }
         }
     }
 
-    function countAdjacentMines(x, y) {
+    function countMines(x, y) {
         let count = 0;
         for (let dy = -1; dy <= 1; dy++) {
             for (let dx = -1; dx <= 1; dx++) {
-                const newY = y + dy;
-                const newX = x + dx;
-                if (newY >= 0 && newY < GRID_SIZE && newX >= 0 && newX < GRID_SIZE) {
-                    if (grid[newY][newX] === -1) count++;
+                const ny = y + dy, nx = x + dx;
+                if (ny >= 0 && ny < GRID && nx >= 0 && nx < GRID && grid[ny][nx] === -1) {
+                    count++;
                 }
             }
         }
@@ -736,75 +663,72 @@ function loadMinesweeperGame() {
     }
 
     function renderGrid() {
-        minesweeperGrid.innerHTML = '';
-        for (let y = 0; y < GRID_SIZE; y++) {
-            for (let x = 0; x < GRID_SIZE; x++) {
+        const gridEl = document.getElementById('mines-grid');
+        gridEl.innerHTML = '';
+        gridEl.style.gridTemplateColumns = `repeat(${GRID}, 1fr)`;
+
+        for (let y = 0; y < GRID; y++) {
+            for (let x = 0; x < GRID; x++) {
                 const cell = document.createElement('div');
-                cell.className = 'mine-cell';
+                cell.className = 'mines-cell';
                 cell.dataset.x = x;
                 cell.dataset.y = y;
 
                 if (revealed[y][x]) {
                     cell.classList.add('revealed');
                     if (grid[y][x] === -1) {
-                        cell.innerHTML = '💣';
+                        cell.textContent = '💣';
                         cell.classList.add('mine');
                     } else if (grid[y][x] > 0) {
                         cell.textContent = grid[y][x];
-                        cell.classList.add(`number-${grid[y][x]}`);
+                        cell.dataset.num = grid[y][x];
                     }
                 } else if (flagged[y][x]) {
-                    cell.innerHTML = '🚩';
+                    cell.textContent = '🚩';
                 }
 
-                minesweeperGrid.appendChild(cell);
+                cell.addEventListener('click', () => reveal(x, y));
+                cell.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                    toggleFlag(x, y);
+                });
+
+                gridEl.appendChild(cell);
             }
         }
     }
 
-    function showMessage(message, type) {
-        gameMessage.textContent = message;
-        gameMessage.className = `game-message ${type}`;
-        
-        // Ocultar las instrucciones cuando el juego termina
-        const instructions = gameContainer.querySelector('.instructions');
-        if (instructions) {
-            instructions.style.display = 'none';
-        }
-    }
+    function reveal(x, y) {
+        if (gameOver || revealed[y][x] || flagged[y][x]) return;
 
-    function revealCell(x, y) {
-        if (revealed[y][x] || flagged[y][x] || gameOver) return;
-
-        if (isFirstClick) {
+        if (firstClick) {
             placeMines(x, y);
-            isFirstClick = false;
+            firstClick = false;
         }
 
         revealed[y][x] = true;
+
         if (grid[y][x] === -1) {
             gameOver = true;
-            revealAllMines();
-            showMessage('¡Game Over! Has encontrado una mina 💣', 'error');
+            revealAll();
+            document.getElementById('mines-result').className = 'game-result error';
+            document.getElementById('mines-result').textContent = '¡Boom! Perdiste 💥';
             return;
         }
 
-        safeCellsLeft--;
-        if (safeCellsLeft === 0) {
+        safeCells--;
+        if (safeCells === 0) {
             gameOver = true;
-            showMessage('¡Felicidades! Has ganado 🎉', 'success');
-            return;
+            document.getElementById('mines-result').className = 'game-result success';
+            document.getElementById('mines-result').textContent = '¡Ganaste! 🎉';
         }
 
         if (grid[y][x] === 0) {
             for (let dy = -1; dy <= 1; dy++) {
                 for (let dx = -1; dx <= 1; dx++) {
-                    const newY = y + dy;
-                    const newX = x + dx;
-                    if (newY >= 0 && newY < GRID_SIZE && newX >= 0 && newX < GRID_SIZE) {
-                        if (!revealed[newY][newX]) {
-                            revealCell(newX, newY);
-                        }
+                    const ny = y + dy, nx = x + dx;
+                    if (ny >= 0 && ny < GRID && nx >= 0 && nx < GRID) {
+                        reveal(nx, ny);
                     }
                 }
             }
@@ -814,228 +738,143 @@ function loadMinesweeperGame() {
     }
 
     function toggleFlag(x, y) {
-        if (revealed[y][x] || gameOver) return;
-
+        if (gameOver || revealed[y][x]) return;
         flagged[y][x] = !flagged[y][x];
-        minesLeft += flagged[y][x] ? -1 : 1;
-        minesLeftDisplay.textContent = minesLeft;
+        const count = flagged.flat().filter(f => f).length;
+        document.getElementById('mines-count').textContent = MINES - count;
         renderGrid();
     }
 
-    function revealAllMines() {
-        for (let y = 0; y < GRID_SIZE; y++) {
-            for (let x = 0; x < GRID_SIZE; x++) {
-                if (grid[y][x] === -1) {
-                    revealed[y][x] = true;
-                }
+    function revealAll() {
+        for (let y = 0; y < GRID; y++) {
+            for (let x = 0; x < GRID; x++) {
+                if (grid[y][x] === -1) revealed[y][x] = true;
             }
         }
         renderGrid();
     }
 
-    minesweeperGrid.addEventListener('click', (e) => {
-        if (e.target.classList.contains('mine-cell')) {
-            const x = parseInt(e.target.dataset.x);
-            const y = parseInt(e.target.dataset.y);
-            revealCell(x, y);
-        }
-    });
-
-    minesweeperGrid.addEventListener('contextmenu', (e) => {
-        e.preventDefault();
-        if (e.target.classList.contains('mine-cell')) {
-            const x = parseInt(e.target.dataset.x);
-            const y = parseInt(e.target.dataset.y);
-            toggleFlag(x, y);
-        }
-    });
-
-    resetButton.addEventListener('click', initializeGame);
-
-    const style = document.createElement('style');
-    style.textContent = `
-        .minesweeper-grid {
-            display: grid;
-            grid-template-columns: repeat(${GRID_SIZE}, 30px);
-            gap: 1px;
-            background-color: #ccc;
-            padding: 10px;
-            border-radius: 5px;
-            margin: 20px auto;
-        }
-        .mine-cell {
-            width: 30px;
-            height: 30px;
-            background-color: #eee;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            cursor: pointer;
-            user-select: none;
-            transition: background-color 0.2s;
-        }
-        .mine-cell:hover {
-            background-color: #ddd;
-        }
-        .mine-cell.revealed {
-            background-color: #fff;
-        }
-        .mine-cell.mine {
-            background-color: #ff9999;
-        }
-        .number-1 { color: blue; }
-        .number-2 { color: green; }
-        .number-3 { color: red; }
-        .number-4 { color: darkblue; }
-        .number-5 { color: darkred; }
-        .number-6 { color: teal; }
-        .number-7 { color: black; }
-        .number-8 { color: gray; }
-        .instructions {
-            margin-top: 20px;
-            text-align: center;
-            font-size: 0.9em;
-            color: #666;
-        }
-        .game-info {
-            text-align: center;
-            margin: 5px 0;
-            font-size: 1.2em;
-        }
-        .game-message {
-            text-align: center;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-            font-weight: bold;
-            animation: fadeIn 0.3s ease-in;
-        }
-        .game-message.error {
-            background-color: #ffebee;
-            color: #c62828;
-            border: 1px solid #ffcdd2;
-        }
-        .game-message.success {
-            background-color: #e8f5e9;
-            color: #2e7d32;
-            border: 1px solid #c8e6c9;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    `;
-    document.head.appendChild(style);
-
-    initializeGame();
+    init();
 }
+
+// ===================================
+// CONNECT 4 GAME
+// ===================================
 function loadConnect4Game() {
-    const ROWS = 6;
-    const COLS = 7;
+    const ROWS = 6, COLS = 7;
     let board = Array(ROWS).fill().map(() => Array(COLS).fill(''));
     let currentPlayer = 'red';
     let gameActive = true;
     let vsComputer = false;
 
-    gameContainer.innerHTML = `
-        <h2>Conecta 4</h2>
-        <div class="game-mode-selector">
-            <button class="mode-btn active" data-mode="2p">2 Jugadores</button>
-            <button class="mode-btn" data-mode="1p">vs CPU</button>
+    gameContainer.innerHTML = createGameHTML('🔴 Conecta 4', `
+        <div class="c4-modes">
+            <button class="c4-mode-btn active" data-mode="2p">👥 2 Jugadores</button>
+            <button class="c4-mode-btn" data-mode="1p">🤖 vs CPU</button>
         </div>
-        <div class="game-status"></div>
-        <div class="connect4-board">
-            ${Array(ROWS * COLS).fill('').map((_, i) => 
-                `<div class="connect4-cell" data-col="${i % COLS}"></div>`
-            ).join('')}
+        <div id="c4-status" class="game-status-text">Turno: 🔴 Rojo</div>
+        <div class="c4-board" id="c4-board">
+            ${Array(ROWS * COLS).fill('').map((_, i) =>
+        `<div class="c4-cell" data-col="${i % COLS}"></div>`
+    ).join('')}
         </div>
-        <button class="reset-button">Nuevo Juego</button>
-    `;
+        <button id="c4-reset" class="game-reset-btn">Nuevo Juego</button>
+    `);
 
-    const gameStatus = gameContainer.querySelector('.game-status');
-    const cells = gameContainer.querySelectorAll('.connect4-cell');
-    const resetButton = gameContainer.querySelector('.reset-button');
-    const modeButtons = gameContainer.querySelectorAll('.mode-btn');
+    const boardEl = document.getElementById('c4-board');
+    const cells = boardEl.querySelectorAll('.c4-cell');
+    const statusEl = document.getElementById('c4-status');
+    const modeButtons = document.querySelectorAll('.c4-mode-btn');
+    const resetBtn = document.getElementById('c4-reset');
 
     function dropPiece(col) {
         if (!gameActive) return false;
-        
+
         for (let row = ROWS - 1; row >= 0; row--) {
             if (board[row][col] === '') {
                 board[row][col] = currentPlayer;
                 updateBoard();
-                
+
                 if (checkWin(row, col)) {
-                    gameStatus.textContent = `${vsComputer && currentPlayer === 'red' ? '¡Has ganado! 🎉' : `¡El jugador ${currentPlayer === 'red' ? '🔴 rojo' : '🟡 amarillo'} ha ganado!`}`;
                     gameActive = false;
-                    highlightWinningCells();
+                    const emoji = currentPlayer === 'red' ? '🔴' : '🟡';
+                    statusEl.textContent = vsComputer ?
+                        (currentPlayer === 'red' ? '¡Ganaste! 🎉' : '¡Perdiste!') :
+                        `¡${emoji} gana!`;
                     return true;
                 }
 
-                if (checkDraw()) {
-                    gameStatus.textContent = '¡Empate! 🤝';
+                if (board[0].every(cell => cell !== '')) {
                     gameActive = false;
+                    statusEl.textContent = '¡Empate!';
                     return true;
                 }
 
                 currentPlayer = currentPlayer === 'red' ? 'yellow' : 'red';
-                gameStatus.textContent = vsComputer ? 
-                    (currentPlayer === 'red' ? 'Tu turno (🔴 rojo)' : 'Turno de la CPU (🟡 amarillo)') : 
-                    `Turno del jugador ${currentPlayer === 'red' ? '🔴 rojo' : '🟡 amarillo'}`;
+                const emoji = currentPlayer === 'red' ? '🔴 Rojo' : '🟡 Amarillo';
+                statusEl.textContent = vsComputer ?
+                    (currentPlayer === 'red' ? 'Tu turno 🔴' : 'CPU pensando...') :
+                    `Turno: ${emoji}`;
                 return true;
             }
         }
         return false;
     }
 
-    function computerMove() {
-        if (!gameActive) return;
-        
-        setTimeout(() => {
-            // Estrategia simple: intentar ganar o bloquear al oponente
-            let bestCol = findBestMove();
-            dropPiece(bestCol);
-        }, 500);
+    function checkWin(row, col) {
+        const directions = [[0, 1], [1, 0], [1, 1], [1, -1]];
+        const color = board[row][col];
+
+        for (const [dy, dx] of directions) {
+            let count = 1;
+            for (let dir = -1; dir <= 1; dir += 2) {
+                let r = row + dy * dir, c = col + dx * dir;
+                while (r >= 0 && r < ROWS && c >= 0 && c < COLS && board[r][c] === color) {
+                    count++;
+                    r += dy * dir;
+                    c += dx * dir;
+                }
+            }
+            if (count >= 4) return true;
+        }
+        return false;
     }
 
-    function findBestMove() {
-        // Primero intentar ganar
-        for (let col = 0; col < COLS; col++) {
-            if (canDropPiece(col)) {
-                let row = getDropRow(col);
+    function computerMove() {
+        if (!gameActive) return;
+
+        setTimeout(() => {
+            // Try to win or block
+            for (let col = 0; col < COLS; col++) {
+                const row = getDropRow(col);
+                if (row === -1) continue;
+
+                // Check win
                 board[row][col] = 'yellow';
                 if (checkWin(row, col)) {
                     board[row][col] = '';
-                    return col;
+                    dropPiece(col);
+                    return;
                 }
                 board[row][col] = '';
-            }
-        }
 
-        // Luego intentar bloquear al oponente
-        for (let col = 0; col < COLS; col++) {
-            if (canDropPiece(col)) {
-                let row = getDropRow(col);
+                // Check block
                 board[row][col] = 'red';
                 if (checkWin(row, col)) {
                     board[row][col] = '';
-                    return col;
+                    dropPiece(col);
+                    return;
                 }
                 board[row][col] = '';
             }
-        }
 
-        // Si no hay movimientos críticos, elegir una columna aleatoria válida
-        let validCols = [];
-        for (let col = 0; col < COLS; col++) {
-            if (canDropPiece(col)) validCols.push(col);
-        }
-        return validCols[Math.floor(Math.random() * validCols.length)];
-    }
-
-    function canDropPiece(col) {
-        return board[0][col] === '';
+            // Random valid move
+            const valid = [];
+            for (let c = 0; c < COLS; c++) {
+                if (board[0][c] === '') valid.push(c);
+            }
+            if (valid.length) dropPiece(valid[Math.floor(Math.random() * valid.length)]);
+        }, 500);
     }
 
     function getDropRow(col) {
@@ -1045,97 +884,40 @@ function loadConnect4Game() {
         return -1;
     }
 
-    function checkWin(row, col) {
-        const directions = [
-            [0, 1],  // horizontal
-            [1, 0],  // vertical
-            [1, 1],  // diagonal derecha
-            [1, -1]  // diagonal izquierda
-        ];
-
-        return directions.some(([dy, dx]) => {
-            return checkDirection(row, col, dy, dx) + checkDirection(row, col, -dy, -dx) >= 3;
-        });
-    }
-
-    function checkDirection(row, col, dy, dx) {
-        const color = board[row][col];
-        let count = 0;
-        let y = row + dy;
-        let x = col + dx;
-
-        while (y >= 0 && y < ROWS && x >= 0 && x < COLS && board[y][x] === color) {
-            count++;
-            y += dy;
-            x += dx;
-        }
-
-        return count;
-    }
-
-    function checkDraw() {
-        return board[0].every(cell => cell !== '');
-    }
-
     function updateBoard() {
         cells.forEach((cell, i) => {
             const row = Math.floor(i / COLS);
             const col = i % COLS;
-            cell.className = `connect4-cell ${board[row][col]}`;
+            cell.className = `c4-cell ${board[row][col]}`;
         });
-    }
-
-    function highlightWinningCells() {
-        // Implementar la lógica para resaltar las fichas ganadoras
     }
 
     function resetGame() {
         board = Array(ROWS).fill().map(() => Array(COLS).fill(''));
         currentPlayer = 'red';
         gameActive = true;
-        gameStatus.textContent = vsComputer ? 
-            'Tu turno (🔴 rojo)' : 
-            'Turno del jugador 🔴 rojo';
         updateBoard();
+        statusEl.textContent = vsComputer ? 'Tu turno 🔴' : 'Turno: 🔴 Rojo';
     }
 
     cells.forEach(cell => {
         cell.addEventListener('click', () => {
-            const col = parseInt(cell.dataset.col);
             if (vsComputer && currentPlayer === 'yellow') return;
-            
+            const col = parseInt(cell.dataset.col);
             if (dropPiece(col) && vsComputer && gameActive) {
                 computerMove();
             }
         });
-
-        // Efecto hover
-        cell.addEventListener('mouseover', () => {
-            if (!gameActive || (vsComputer && currentPlayer === 'yellow')) return;
-            const col = parseInt(cell.dataset.col);
-            cells.forEach(c => {
-                if (parseInt(c.dataset.col) === col && canDropPiece(col)) {
-                    c.classList.add('highlight');
-                }
-            });
-        });
-
-        cell.addEventListener('mouseout', () => {
-            cells.forEach(c => c.classList.remove('highlight'));
-        });
     });
-
-    resetButton.addEventListener('click', resetGame);
 
     modeButtons.forEach(btn => {
         btn.addEventListener('click', () => {
             modeButtons.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            vsComputer = btn.getAttribute('data-mode') === '1p';
+            vsComputer = btn.dataset.mode === '1p';
             resetGame();
         });
     });
 
-    // Inicializar el estado del juego
-    gameStatus.textContent = 'Turno del jugador 🔴 rojo';
+    resetBtn.addEventListener('click', resetGame);
 }
