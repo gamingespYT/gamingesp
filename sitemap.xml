@@ -26,8 +26,14 @@
   </url>
   <url>
     <loc>https://gamingespyt.github.io/gamingesp/staff.html</loc>
-    <lastmod>2026-02-06</lastmod>
+    <lastmod>2026-06-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://gamingespyt.github.io/gamingesp/musica.html</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
 </urlset>
