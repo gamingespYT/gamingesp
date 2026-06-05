@@ -559,6 +559,170 @@
     z-index: 1;
 }
 
+/* YouTube button in playlist */
+.playlist-yt-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-md);
+    background: rgba(255, 0, 0, 0.1);
+    color: #ff0000;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+    transition: all var(--transition-base);
+    text-decoration: none;
+}
+
+.playlist-yt-btn svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+}
+
+.playlist-yt-btn:hover {
+    background: rgba(255, 0, 0, 0.2);
+    color: #ff0000;
+    transform: scale(1.15);
+    box-shadow: 0 0 16px rgba(255, 0, 0, 0.25);
+}
+
+.playlist-yt-btn:active {
+    transform: scale(0.95);
+}
+
+/* ===================================
+   VIDEOCLIPS SECTION
+   =================================== */
+
+.videoclips-section {
+    padding-top: 0;
+}
+
+.videoclips-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-xl);
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.videoclip-card {
+    background: var(--color-bg-card);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    text-decoration: none;
+    transition: all var(--transition-base);
+    display: block;
+}
+
+.videoclip-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(255, 0, 0, 0.3);
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.4),
+        0 0 30px rgba(255, 0, 0, 0.1);
+}
+
+.videoclip-thumbnail {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--color-bg-elevated);
+}
+
+.videoclip-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-slow);
+}
+
+.videoclip-card:hover .videoclip-thumbnail img {
+    transform: scale(1.05);
+}
+
+.videoclip-play-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.3);
+    transition: background var(--transition-base);
+}
+
+.videoclip-card:hover .videoclip-play-overlay {
+    background: rgba(0, 0, 0, 0.15);
+}
+
+.videoclip-play-btn {
+    transition: all var(--transition-base);
+}
+
+.videoclip-play-btn svg {
+    width: 68px;
+    height: 48px;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.4));
+    transition: transform var(--transition-base);
+}
+
+.videoclip-card:hover .videoclip-play-btn svg {
+    transform: scale(1.12);
+}
+
+.videoclip-play-btn .yt-bg {
+    transition: fill var(--transition-fast);
+}
+
+.videoclip-card:hover .videoclip-play-btn .yt-bg {
+    fill: #ff0000;
+}
+
+.videoclip-info {
+    padding: var(--space-lg) var(--space-xl);
+}
+
+.videoclip-title {
+    font-family: var(--font-heading);
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-xs);
+}
+
+.videoclip-subtitle {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-md);
+}
+
+.videoclip-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: #ff4444;
+    transition: all var(--transition-fast);
+}
+
+.videoclip-cta svg {
+    fill: currentColor;
+}
+
+.videoclip-card:hover .videoclip-cta {
+    color: #ff0000;
+    transform: translateX(4px);
+}
+
 /* ===================================
    MUSIC INFO SECTION
    =================================== */
@@ -657,6 +821,15 @@
     .playlist-item {
         padding: var(--space-md);
     }
+
+    .videoclips-grid {
+        grid-template-columns: 1fr;
+        max-width: 500px;
+    }
+
+    .videoclip-info {
+        padding: var(--space-md) var(--space-lg);
+    }
 }
 
 @media (max-width: 480px) {
@@ -693,6 +866,21 @@
 
     .info-card {
         padding: var(--space-xl);
+    }
+
+    .videoclip-play-btn svg {
+        width: 54px;
+        height: 38px;
+    }
+
+    .playlist-yt-btn {
+        width: 28px;
+        height: 28px;
+    }
+
+    .playlist-yt-btn svg {
+        width: 15px;
+        height: 15px;
     }
 }
 
