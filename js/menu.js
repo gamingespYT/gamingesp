@@ -34,6 +34,10 @@ document.addEventListener("DOMContentLoaded", function () {
                         <span class="nav-icon">🎮</span>
                         <span class="nav-text">Juegos</span>
                     </a></li>
+                    <li><a href="musica.html" class="nav-link" data-page="musica">
+                        <span class="nav-icon">🎵</span>
+                        <span class="nav-text">Música</span>
+                    </a></li>
                     <li><a href="staff.html" class="nav-link nav-link-cta" data-page="staff">
                         <span class="nav-icon">👥</span>
                         <span class="nav-text">Staff</span>
@@ -48,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         <a href="https://discord.gg/42uecDVrPp" target="_blank" rel="noopener" aria-label="Discord">💬</a>
                         <a href="https://www.instagram.com/gamingesp_insta" target="_blank" rel="noopener" aria-label="Instagram">📷</a>
                     </div>
-                    <p class="nav-copyright">© 2025 Gaming España</p>
+                    <p class="nav-copyright">© 2026 Gaming España</p>
                 </div>
             </nav>
             
@@ -409,21 +413,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     `;
 
-    // ===================================
-    // COOKIE BANNER HTML
-    // ===================================
-    const bannerHTML = `
-    <div id="cookie-banner" class="cookie-banner glass">
-        <div class="cookie-content">
-            <div class="cookie-text">
-                <p>🍪 Utilizamos cookies y Google Analytics para mejorar tu experiencia.</p>
-            </div>
-            <div class="cookie-actions">
-                <button id="accept-cookies" class="btn btn-primary btn-sm">Aceptar</button>
-            </div>
-        </div>
-    </div>
-    `;
+
 
     // ===================================
     // COOKIE BANNER CSS
@@ -495,7 +485,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Create and insert styles
     const styleTag = document.createElement("style");
-    styleTag.innerHTML = headerCSS + bannerCSS;
+    styleTag.innerHTML = headerCSS;
     document.head.appendChild(styleTag);
 
     // ===================================
