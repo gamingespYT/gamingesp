@@ -6,12 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Primary Meta Tags -->
-    <title>Mini Juegos Online Gratis - Memory, Buscaminas, Conecta 4 | Gaming España</title>
-    <meta name="title" content="Mini Juegos Online Gratis - Memory, Buscaminas, Conecta 4 | Gaming España">
+    <title>Mini Juegos Online Gratis - Buscaminas, Snake, Tetris, Conecta 4 | Gaming España</title>
+    <meta name="title" content="Mini Juegos Online Gratis - Buscaminas, Snake, Tetris, Conecta 4 | Gaming España">
     <meta name="description"
-        content="Juega gratis a nuestros 8 mini juegos online: Memory, Buscaminas, Conecta 4, Tres en Raya, Ahorcado, Dino Run y más. ¡Sin descargas!">
+        content="Juega gratis a nuestros mini juegos online: Buscaminas, Snake, Tetris, Conecta 4, Memory, Ahorcado y más. Juegos avanzados y clásicos sin descargas.">
     <meta name="keywords"
-        content="juegos online gratis, mini juegos, memory game, buscaminas online, conecta 4, tres en raya, ahorcado, juegos HTML5">
+        content="juegos online gratis, mini juegos, buscaminas, snake, tetris, conecta 4, memory game, ahorcado, juegos HTML5">
     <meta name="author" content="Gaming España">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://gamingespyt.github.io/gamingesp/juegos.html">
@@ -28,7 +28,7 @@
     <meta property="og:url" content="https://gamingespyt.github.io/gamingesp/juegos.html">
     <meta property="og:title" content="Mini Juegos Online Gratis | Gaming España">
     <meta property="og:description"
-        content="8 mini juegos gratis: Memory, Buscaminas, Conecta 4, Tres en Raya y más. ¡Juega sin descargar!">
+        content="Buscaminas, Snake, Tetris, Conecta 4 y más juegos gratis. ¡Juega sin descargar!">
     <meta property="og:image" content="https://gamingespyt.github.io/gamingesp/img/logo.png">
     <meta property="og:locale" content="es_ES">
     <meta property="og:site_name" content="Gaming España">
@@ -37,7 +37,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://gamingespyt.github.io/gamingesp/juegos.html">
     <meta name="twitter:title" content="Mini Juegos Online Gratis | Gaming España">
-    <meta name="twitter:description" content="8 mini juegos gratis: Memory, Buscaminas, Conecta 4 y más. ¡Juega ahora!">
+    <meta name="twitter:description" content="Buscaminas, Snake, Tetris, Conecta 4 y más juegos gratis. ¡Juega ahora!">
     <meta name="twitter:image" content="https://gamingespyt.github.io/gamingesp/img/logo.png">
 
     <!-- Fonts -->
@@ -57,17 +57,23 @@
         "@context": "https://schema.org",
         "@type": "WebPage",
         "name": "Mini Juegos Online Gratis",
-        "description": "Colección de 8 mini juegos gratis para jugar en navegador",
+        "description": "Colección de mini juegos gratis para jugar en navegador",
         "url": "https://gamingespyt.github.io/gamingesp/juegos.html",
         "mainEntity": {
             "@type": "ItemList",
             "name": "Mini Juegos",
-            "numberOfItems": 8,
+            "numberOfItems": 10,
             "itemListElement": [
-                {"@type": "Game", "position": 1, "name": "Memory"},
-                {"@type": "Game", "position": 2, "name": "Buscaminas"},
-                {"@type": "Game", "position": 3, "name": "Conecta 4"},
-                {"@type": "Game", "position": 4, "name": "Tres en Raya"}
+                {"@type": "Game", "position": 1, "name": "Buscaminas"},
+                {"@type": "Game", "position": 2, "name": "Snake"},
+                {"@type": "Game", "position": 3, "name": "Tetris"},
+                {"@type": "Game", "position": 4, "name": "Conecta 4"},
+                {"@type": "Game", "position": 5, "name": "Memory"},
+                {"@type": "Game", "position": 6, "name": "Ahorcado"},
+                {"@type": "Game", "position": 7, "name": "Tres en Raya"},
+                {"@type": "Game", "position": 8, "name": "Dino Run"},
+                {"@type": "Game", "position": 9, "name": "Adivina el Número"},
+                {"@type": "Game", "position": 10, "name": "Piedra, Papel, Tijera"}
             ]
         }
     }
@@ -102,49 +108,103 @@
             </div>
         </section>
 
-        <!-- Game Selector -->
+        <!-- Games Section -->
         <section class="games-section section">
             <div class="container">
-                <!-- Game Selector Cards -->
-                <div class="game-selector" id="game-selector">
-                    <button class="game-card reveal" data-game="guess-number" data-delay="0">
+
+                <!-- ADVANCED GAMES -->
+                <div class="category-header">
+                    <div class="category-label advanced-label">
+                        <span class="category-icon">⚡</span>
+                        <span>Juegos Avanzados</span>
+                    </div>
+                    <p class="category-desc">Los mejores juegos con más profundidad y desafío</p>
+                </div>
+                <div class="game-selector" id="game-selector-advanced">
+                    <button class="game-card reveal advanced-card" data-game="minesweeper" data-delay="0">
+                        <span class="game-icon">💣</span>
+                        <span class="game-name">Buscaminas</span>
+                        <span class="game-tag">Dificultades</span>
+                    </button>
+
+                    <button class="game-card reveal advanced-card" data-game="snake" data-delay="50">
+                        <span class="game-icon">🐍</span>
+                        <span class="game-name">Snake</span>
+                        <span class="game-tag new-tag">Nuevo</span>
+                    </button>
+
+                    <button class="game-card reveal advanced-card" data-game="tetris" data-delay="100">
+                        <span class="game-icon">🧱</span>
+                        <span class="game-name">Tetris</span>
+                        <span class="game-tag new-tag">Nuevo</span>
+                    </button>
+
+                    <button class="game-card reveal advanced-card" data-game="connect4" data-delay="150">
+                        <span class="game-icon">🔴</span>
+                        <span class="game-name">Conecta 4</span>
+                        <span class="game-tag">IA Mejorada</span>
+                    </button>
+
+                    <button class="game-card reveal advanced-card" data-game="tic-tac-toe" data-delay="200">
+                        <span class="game-icon">⭕</span>
+                        <span class="game-name">Tres en Raya</span>
+                        <span class="game-tag">IA Minimax</span>
+                    </button>
+
+                    <button class="game-card reveal advanced-card" data-game="2048" data-delay="250">
+                        <span class="game-icon">🔢</span>
+                        <span class="game-name">2048</span>
+                        <span class="game-tag new-tag">Nuevo</span>
+                    </button>
+
+                    <button class="game-card reveal advanced-card" data-game="pong" data-delay="300">
+                        <span class="game-icon">🏓</span>
+                        <span class="game-name">Pong</span>
+                        <span class="game-tag new-tag">Nuevo</span>
+                    </button>
+
+                    <button class="game-card reveal advanced-card" data-game="flappy" data-delay="350">
+                        <span class="game-icon">🐦</span>
+                        <span class="game-name">Flappy Bird</span>
+                        <span class="game-tag new-tag">Nuevo</span>
+                    </button>
+                </div>
+
+                <!-- CLASSIC GAMES -->
+                <div class="category-header classic-category">
+                    <button class="category-toggle" id="classic-toggle" aria-expanded="false">
+                        <div class="category-label classic-label">
+                            <span class="category-icon">🕹️</span>
+                            <span>Juegos Sencillos</span>
+                        </div>
+                        <span class="toggle-arrow" id="toggle-arrow">▼</span>
+                    </button>
+                    <p class="category-desc">Juegos rápidos para pasar el rato</p>
+                </div>
+                <div class="game-selector classic-selector collapsed" id="game-selector-classic">
+                    <button class="game-card reveal classic-card" data-game="guess-number" data-delay="0">
                         <span class="game-icon">🎯</span>
                         <span class="game-name">Adivina el Número</span>
                     </button>
 
-                    <button class="game-card reveal" data-game="rock-paper-scissors" data-delay="50">
+                    <button class="game-card reveal classic-card" data-game="rock-paper-scissors" data-delay="50">
                         <span class="game-icon">✌️</span>
                         <span class="game-name">Piedra, Papel, Tijera</span>
                     </button>
 
-                    <button class="game-card reveal" data-game="memory-game" data-delay="100">
+                    <button class="game-card reveal classic-card" data-game="memory-game" data-delay="100">
                         <span class="game-icon">🧠</span>
                         <span class="game-name">Memory</span>
                     </button>
 
-                    <button class="game-card reveal" data-game="hangman" data-delay="150">
-                        <span class="game-icon">🔤</span>
-                        <span class="game-name">Ahorcado</span>
-                    </button>
-
-                    <button class="game-card reveal" data-game="dino-game" data-delay="200">
+                    <button class="game-card reveal classic-card" data-game="dino-game" data-delay="150">
                         <span class="game-icon">🦖</span>
                         <span class="game-name">Dino Run</span>
                     </button>
 
-                    <button class="game-card reveal" data-game="tic-tac-toe" data-delay="250">
-                        <span class="game-icon">⭕</span>
-                        <span class="game-name">Tres en Raya</span>
-                    </button>
-
-                    <button class="game-card reveal" data-game="minesweeper" data-delay="300">
-                        <span class="game-icon">💣</span>
-                        <span class="game-name">Buscaminas</span>
-                    </button>
-
-                    <button class="game-card reveal" data-game="connect4" data-delay="350">
-                        <span class="game-icon">🔴</span>
-                        <span class="game-name">Conecta 4</span>
+                    <button class="game-card reveal classic-card" data-game="hangman" data-delay="200">
+                        <span class="game-icon">🔤</span>
+                        <span class="game-name">Ahorcado</span>
                     </button>
                 </div>
 
@@ -155,47 +215,35 @@
                         <h2>¡Bienvenido a los Juegos!</h2>
                         <p>Selecciona un juego de arriba para comenzar</p>
 
-                        <div class="game-descriptions">
-                            <div class="game-desc-grid">
-                                <div class="game-desc">
-                                    <span>🎯</span>
-                                    <strong>Adivina el Número</strong>
-                                    <p>Adivina el número secreto entre 1 y 100</p>
+                        <div class="featured-games">
+                            <div class="featured-game clickable-featured" data-game="snake">
+                                <span class="featured-icon">🐍</span>
+                                <div class="featured-info">
+                                    <div class="featured-title-row">
+                                        <strong>Snake</strong>
+                                        <span class="new-badge">NUEVO</span>
+                                    </div>
+                                    <p>El clásico juego de la serpiente con puntuaciones altas</p>
                                 </div>
-                                <div class="game-desc">
-                                    <span>✌️</span>
-                                    <strong>Piedra, Papel, Tijera</strong>
-                                    <p>El clásico juego contra la computadora</p>
+                            </div>
+                            <div class="featured-game clickable-featured" data-game="tetris">
+                                <span class="featured-icon">🧱</span>
+                                <div class="featured-info">
+                                    <div class="featured-title-row">
+                                        <strong>Tetris</strong>
+                                        <span class="new-badge">NUEVO</span>
+                                    </div>
+                                    <p>El juego de bloques más famoso del mundo</p>
                                 </div>
-                                <div class="game-desc">
-                                    <span>🧠</span>
-                                    <strong>Memory</strong>
-                                    <p>Encuentra todas las parejas de cartas</p>
-                                </div>
-                                <div class="game-desc">
-                                    <span>🔤</span>
-                                    <strong>Ahorcado</strong>
-                                    <p>Adivina la palabra antes de perder</p>
-                                </div>
-                                <div class="game-desc">
-                                    <span>🦖</span>
-                                    <strong>Dino Run</strong>
-                                    <p>Salta y esquiva los obstáculos</p>
-                                </div>
-                                <div class="game-desc">
-                                    <span>⭕</span>
-                                    <strong>Tres en Raya</strong>
-                                    <p>Consigue tres en línea para ganar</p>
-                                </div>
-                                <div class="game-desc">
-                                    <span>💣</span>
-                                    <strong>Buscaminas</strong>
-                                    <p>Evita las minas usando tu lógica</p>
-                                </div>
-                                <div class="game-desc">
-                                    <span>🔴</span>
-                                    <strong>Conecta 4</strong>
-                                    <p>Alinea 4 fichas del mismo color</p>
+                            </div>
+                            <div class="featured-game clickable-featured" data-game="minesweeper">
+                                <span class="featured-icon">💣</span>
+                                <div class="featured-info">
+                                    <div class="featured-title-row">
+                                        <strong>Buscaminas</strong>
+                                        <span class="improved-badge">MEJORADO</span>
+                                    </div>
+                                    <p>Ahora con 3 dificultades y cronómetro</p>
                                 </div>
                             </div>
                         </div>
